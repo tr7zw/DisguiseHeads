@@ -38,4 +38,4 @@ jobs:
           name: Artifacts
           path: |
             DHFabric/build/libs/*
-DHForge/build/libs/*
+            DHForge/build/libs/*
