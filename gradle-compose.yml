@@ -1,0 +1,17 @@
+version: '0.0.1'
+source: "https://github.com/tr7zw/ForgeFabricComposeTemplate/tree/main/"
+replacements:
+  group: "dev.tr7zw"
+  name: "DisguiseHeads"
+  id: "disguiseheads"
+  version: "1.0.0"
+  author: "tr7zw"
+  dependencies: ""
+  licensename: "LICENSE"
+rootProject:
+  template: "."
+subProjects:
+  DHFabric:
+    template: "Fabric"
+  DHForge:
+    template: "Forge"

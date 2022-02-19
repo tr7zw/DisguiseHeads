@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.tr7zw.disguiseheads.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+  ],
+  "client": [
+    "AbstractClientPlayerEntity",
+    "CustomHeadLayerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
