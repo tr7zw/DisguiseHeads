@@ -45,17 +45,18 @@ public abstract class AbstractClientPlayerEntity extends Player {
         if (item instanceof BlockItem && ((BlockItem) item).getBlock() instanceof AbstractSkullBlock) {
             GameProfile gameProfile = null;
             if (itemStack.hasTag()) {
-                String string;
                 CompoundTag compoundTag = itemStack.getTag();
                 if (compoundTag.contains("SkullOwner", 10)) {
                     gameProfile = NbtUtils.readGameProfile((CompoundTag) compoundTag.getCompound("SkullOwner"));
                 }
-                ResourceLocation id = getSkin(gameProfile);
-                if(!id.equals(lastId)) {
-                    lastId = id;
+                if(gameProfile != null) {
+                    ResourceLocation id = getSkin(gameProfile);
+                    if(!id.equals(lastId)) {
+                        lastId = id;
+                    }
+                    info.setReturnValue(id);
+                    return id;
                 }
-                info.setReturnValue(id);
-                return id;
             }
         }
         if(lastId != null) {
@@ -75,8 +76,12 @@ public abstract class AbstractClientPlayerEntity extends Player {
 
     private ResourceLocation getSkin(GameProfile gameProfile) {
         Minecraft minecraftClient = Minecraft.getInstance();
+        if(gameProfile.getProperties() == null) {
+            return DefaultPlayerSkin
+                    .getDefaultSkin(UUIDUtil.getOrCreatePlayerUUID(gameProfile));
+        }
         Map map = minecraftClient.getSkinManager().getInsecureSkinInformation(gameProfile);
-        if (map.containsKey((Object) MinecraftProfileTexture.Type.SKIN)) {
+        if (map != null && map.containsKey((Object) MinecraftProfileTexture.Type.SKIN)) {
             this.modelOverwrite = ((MinecraftProfileTexture) map.get((Object) MinecraftProfileTexture.Type.SKIN)).getMetadata("model");
             if (this.modelOverwrite == null) {
                 this.modelOverwrite = "default";
