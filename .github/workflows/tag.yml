@@ -34,7 +34,7 @@ jobs:
           curseforge-id: 593611
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}  
           loaders: forge
-          version: ${{github.ref_name}} - Forge
+          name: ${{github.ref_name}} - Forge
           version-type: beta
           files: '*Forge/build/libs/!(*-@(dev|sources|javadoc|all)).jar'
       - name: Publish-Fabric
@@ -46,5 +46,5 @@ jobs:
           curseforge-id: 593611
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}  
           loaders: fabric
-          version: ${{github.ref_name}} - Fabric
+          name: ${{github.ref_name}} - Fabric
           files: '*Fabric/build/libs/!(*-@(dev|sources|javadoc|all)).jar'
