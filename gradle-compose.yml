@@ -1,13 +1,15 @@
 version: '0.0.1'
-source: "https://github.com/tr7zw/ForgeFabricComposeTemplate/tree/1.19.2/"
+source: "https://github.com/tr7zw/ForgeFabricComposeTemplate/tree/1.19.2-mcpublish/"
 replacements:
   group: "dev.tr7zw"
   name: "DisguiseHeads"
   id: "disguiseheads"
-  version: "1.0.0"
+  version: "1.0.1"
   author: "tr7zw"
   dependencies: ""
   licensename: "LICENSE"
+  modrinthid: u4pgScAU
+  curseforgeid: 593611
 rootProject:
   template: "."
 subProjects:

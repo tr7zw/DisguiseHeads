@@ -1,34 +1,50 @@
 name: Create Release
 
-on: create
+on:
+  release:
+    types: [published]
 
 jobs:
   build:
-    strategy:
-      matrix:
-        # Use these Java versions
-        java: [
-          17
-        ]
-        # and run on both Linux and Windows
-        os: [ubuntu-20.04]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
       - name: checkout repository
         uses: actions/checkout@v2
-      - name: setup jdk ${{ matrix.java }}
+      - name: setup jdk 17
         uses: actions/setup-java@v1
         with:
-          java-version: ${{ matrix.java }}
+          java-version: 17
       - name: make gradle wrapper executable
-        if: ${{ runner.os != 'Windows' }}
         run: chmod +x ./gradlecw
       - name: build
         run: ./gradlecw build
       - name: Release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
             DHFabric/build/libs/*
             DHForge/build/libs/*
+
+      - name: Publish-Forge
+        uses: Kir-Antipov/mc-publish@v3.2
+        with:
+          modrinth-id: u4pgScAU
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+
+          curseforge-id: 593611
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}  
+          loaders: forge
+          version: ${{github.ref_name}} - Forge
+          version-type: beta
+          files: '*Forge/build/libs/!(*-@(dev|sources|javadoc|all)).jar'
+      - name: Publish-Fabric
+        uses: Kir-Antipov/mc-publish@v3.2
+        with:
+          modrinth-id: u4pgScAU
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+
+          curseforge-id: 593611
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}  
+          loaders: fabric
+          version: ${{github.ref_name}} - Fabric
+          files: '*Fabric/build/libs/!(*-@(dev|sources|javadoc|all)).jar'
