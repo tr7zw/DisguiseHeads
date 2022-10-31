@@ -25,24 +25,28 @@ jobs:
             DHFabric/build/libs/*
             DHForge/build/libs/*
 
-      - name: Publish-Forge
+      - name: Publish-Forge-Curseforge
         uses: Kir-Antipov/mc-publish@v3.2
         with:
-          modrinth-id: u4pgScAU
-          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-
           curseforge-id: 593611
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}  
           loaders: forge
           name: ${{github.ref_name}} - Forge
           version-type: beta
           files: '*Forge/build/libs/!(*-@(dev|sources|javadoc|all)).jar'
+      - name: Publish-Forge-Modrinth
+        uses: Kir-Antipov/mc-publish@v3.2
+        with:
+          modrinth-id: u4pgScAU
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          loaders: forge
+          name: ${{github.ref_name}} - Forge
+          files: '*Forge/build/libs/!(*-@(dev|sources|javadoc|all)).jar'
       - name: Publish-Fabric
         uses: Kir-Antipov/mc-publish@v3.2
         with:
           modrinth-id: u4pgScAU
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-
           curseforge-id: 593611
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}  
           loaders: fabric
