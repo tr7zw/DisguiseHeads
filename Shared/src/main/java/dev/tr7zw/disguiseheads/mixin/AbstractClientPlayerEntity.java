@@ -20,7 +20,6 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.ProfilePublicKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -30,9 +29,8 @@ import net.minecraft.world.level.block.AbstractSkullBlock;
 @Mixin(AbstractClientPlayer.class)
 public abstract class AbstractClientPlayerEntity extends Player {
 
-    public AbstractClientPlayerEntity(Level level, BlockPos blockPos, float f, GameProfile gameProfile,
-            ProfilePublicKey profilePublicKey) {
-        super(level, blockPos, f, gameProfile, profilePublicKey);
+    public AbstractClientPlayerEntity(Level level, BlockPos blockPos, float f, GameProfile gameProfile) {
+        super(level, blockPos, f, gameProfile);
     }
 
     private ResourceLocation lastId = null;

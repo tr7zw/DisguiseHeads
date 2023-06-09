@@ -1,15 +1,17 @@
-version: '0.0.1'
-source: "https://github.com/tr7zw/ForgeFabricComposeTemplate/tree/1.19.2-mcpublish/"
+version: '0.0.2'
+source: "https://github.com/tr7zw/ModComposeTemplate/tree/1.20"
 replacements:
-  group: "dev.tr7zw"
   name: "DisguiseHeads"
   id: "disguiseheads"
   version: "1.0.1"
-  author: "tr7zw"
-  dependencies: ""
-  licensename: "LICENSE"
-  modrinthid: u4pgScAU
-  curseforgeid: 593611
+  modrinthid: "u4pgScAU"
+  curseforgeid: "593611"
+enabledFlags:
+  - autopublish
+  - publishFabric
+  - publishForge
+  - modrinth
+  - curseforge
 rootProject:
   template: "."
 subProjects:
