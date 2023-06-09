@@ -4,6 +4,7 @@ replacements:
   name: "DisguiseHeads"
   id: "disguiseheads"
   version: "1.0.1"
+  relocationpackage: "dev.tr7zw.disguiseheads"
   modrinthid: "u4pgScAU"
   curseforgeid: "593611"
 enabledFlags:
