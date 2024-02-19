@@ -10,7 +10,7 @@ public class DisguiseHeadsMod extends DisguiseHeadsShared {
     public DisguiseHeadsMod() {
         try {
             Class clientClass = net.minecraft.client.Minecraft.class;
-        }catch(Throwable ex) {
+        } catch (Throwable ex) {
             LOGGER.warn("DisguiseHeads Mod installed on a Server. Going to sleep.");
             return;
         }

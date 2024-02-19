@@ -1,6 +1,6 @@
 # DisguiseHeads
 
-Swap skins when wearing a player head. 
+Swap skins when wearing a player head.
 
 ## License
 

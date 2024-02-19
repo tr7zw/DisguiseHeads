@@ -20,7 +20,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 @Mixin(CustomHeadLayer.class)
-public abstract class CustomHeadLayerMixin<T extends LivingEntity, M extends EntityModel<T> & HeadedModel> extends RenderLayer<T, M> {
+public abstract class CustomHeadLayerMixin<T extends LivingEntity, M extends EntityModel<T> & HeadedModel>
+        extends RenderLayer<T, M> {
 
     public CustomHeadLayerMixin(RenderLayerParent<T, M> renderLayerParent) {
         super(renderLayerParent);
