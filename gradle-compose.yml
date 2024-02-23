@@ -9,7 +9,7 @@ replacements:
   sourcesUrl: "https://github.com/tr7zw/DisguiseHeads"
   issuesUrl: "https://github.com/tr7zw/DisguiseHeads/issues"
   fabric_entrypoint: "dev.tr7zw.disguiseheads.DisguiseHeadsMod"
-  fabric_modmenu_entrypoint: "null"
+  fabric_modmenu_entrypoint: "dev.tr7zw.disguiseheads.config.DHModMenu"
   relocationpackage: "dev.tr7zw.disguiseheads"
   modrinthid: "u4pgScAU"
   curseforgeid: "593611"

@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import dev.tr7zw.disguiseheads.DisguiseHeadsShared;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HeadedModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -23,7 +24,7 @@ import net.minecraft.world.item.Items;
 public abstract class CustomHeadLayerMixin<T extends LivingEntity, M extends EntityModel<T> & HeadedModel>
         extends RenderLayer<T, M> {
 
-    public CustomHeadLayerMixin(RenderLayerParent<T, M> renderLayerParent) {
+    CustomHeadLayerMixin(RenderLayerParent<T, M> renderLayerParent) {
         super(renderLayerParent);
     }
 
@@ -32,16 +33,13 @@ public abstract class CustomHeadLayerMixin<T extends LivingEntity, M extends Ent
             float g, float h, float j, float k, float l, CallbackInfo info) {
         if (shouldHide(livingEntity.getItemBySlot(EquipmentSlot.HEAD)) && livingEntity instanceof Player) {
             info.cancel();
-            return;
         }
     }
 
     private boolean shouldHide(ItemStack item) {
-        if (item.isEmpty())
+        if (item.isEmpty() || !DisguiseHeadsShared.instance.config.enablePlayerDisguise)
             return false;
-        if (item.getItem() == Items.PLAYER_HEAD)
-            return true;
-        return false;
+        return item.getItem() == Items.PLAYER_HEAD;
     }
 
 }

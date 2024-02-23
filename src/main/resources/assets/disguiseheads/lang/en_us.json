@@ -1,0 +1,7 @@
+{
+    "text.disguiseheads.title": "DisguiseHeads Settings",
+    "text.disguiseheads.enable.enablePlayerDisguise": "Enable Player Disguise",
+    "text.disguiseheads.enable.enablePlayerDisguise.tooltip": "Disguise players wearing a player head",
+    "text.disguiseheads.enable.enableArmorstandDisguise": "Enable Armorstand Disguise",
+    "text.disguiseheads.enable.enableArmorstandDisguise.tooltip": "Disguise armorstands wearing a player head"
+}
