@@ -22,9 +22,11 @@ public class ConfigScreenProvider {
             @Override
             public void initialize() {
                 List<Object> options = new ArrayList<>();
-                options.add(getOnOffOption("text.disguiseheads.enable.enablePlayerDisguise", () -> DisguiseHeadsShared.instance.config.enablePlayerDisguise,
+                options.add(getOnOffOption("text.disguiseheads.enable.enablePlayerDisguise",
+                        () -> DisguiseHeadsShared.instance.config.enablePlayerDisguise,
                         b -> DisguiseHeadsShared.instance.config.enablePlayerDisguise = b));
-                options.add(getOnOffOption("text.disguiseheads.enable.enableArmorstandDisguise", () -> DisguiseHeadsShared.instance.config.enableArmorstandDisguise,
+                options.add(getOnOffOption("text.disguiseheads.enable.enableArmorstandDisguise",
+                        () -> DisguiseHeadsShared.instance.config.enableArmorstandDisguise,
                         b -> DisguiseHeadsShared.instance.config.enableArmorstandDisguise = b));
 
                 // spotless:off

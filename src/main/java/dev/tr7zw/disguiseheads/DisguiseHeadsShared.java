@@ -42,7 +42,7 @@ public class DisguiseHeadsShared {
         ModLoaderUtil.disableDisplayTest();
         ModLoaderUtil.registerConfigScreen(ConfigScreenProvider::createConfigScreen);
     }
-    
+
     public void writeConfig() {
         if (settingsFile.exists())
             settingsFile.delete();
@@ -52,6 +52,5 @@ public class DisguiseHeadsShared {
             e1.printStackTrace();
         }
     }
-
 
 }

@@ -61,7 +61,7 @@ public interface FakePlayerHandler<T extends ArmorStand> {
         if (livingEntity.isPassenger() && livingEntity.getVehicle() instanceof LivingEntity veh) {
             h = Mth.rotLerp(tick, veh.yBodyRotO, veh.yBodyRot);
         }
-        float o = 0;//getAnimationProgressRedirect(livingEntity, tick);
+        float o = 0;// getAnimationProgressRedirect(livingEntity, tick);
         this.setupTransformsRedirect(livingEntity, poseStack, o, h, tick);
         poseStack.scale(-1.0f, -1.0f, 1.0f);
         this.scaleRedirect(livingEntity, poseStack, tick);
@@ -83,7 +83,7 @@ public interface FakePlayerHandler<T extends ArmorStand> {
             renderLayer.render(poseStack, multiBufferSource, packedLight, livingEntity, 0, 0, tick, 0, h, j);
         }
         poseStack.popPose();
-        //super.render(livingEntity, f, g, PoseStack, MultiBufferSource, i);
+        // super.render(livingEntity, f, g, PoseStack, MultiBufferSource, i);
     }
 
 }

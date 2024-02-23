@@ -31,7 +31,7 @@ public abstract class AbstractClientPlayerEntity extends Player {
 
     @Inject(method = "getSkin", at = @At("HEAD"), cancellable = true)
     public void getSkin(CallbackInfoReturnable<PlayerSkin> info) {
-        if(!DisguiseHeadsShared.instance.config.enablePlayerDisguise) {
+        if (!DisguiseHeadsShared.instance.config.enablePlayerDisguise) {
             return;
         }
         ItemStack itemStack = getItemBySlot(EquipmentSlot.HEAD);
