@@ -50,11 +50,11 @@ public interface FakePlayerHandler<T extends ArmorStand> {
             MultiBufferSource multiBufferSource, int packedLight, VertexConsumer vertices,
             PlayerModel<ArmorStand> targetmodel, List<RenderLayer> customLayers) {
         poseStack.pushPose();
-        float scale = livingEntity.isBaby() ? 0.9375F / 2 : 0.9375f;
+        float scale = 1;
         poseStack.scale(scale, scale, scale);
         targetmodel.attackTime = 0;
         targetmodel.riding = livingEntity.isPassenger();
-        targetmodel.young = false;
+        targetmodel.young = livingEntity.isBaby();
         targetmodel.crouching = false;
         float h = Mth.rotLerp(tick, livingEntity.yBodyRotO, livingEntity.yBodyRot);
         float j = Mth.rotLerp(tick, livingEntity.yHeadRotO, livingEntity.yHeadRot);
