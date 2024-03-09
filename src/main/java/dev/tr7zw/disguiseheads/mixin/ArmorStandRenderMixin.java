@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.layers.CustomHeadLayer;
 import net.minecraft.client.renderer.entity.layers.ElytraLayer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
@@ -78,6 +79,7 @@ public abstract class ArmorStandRenderMixin extends EntityRenderer implements Fa
                 context.getModelManager()));
         customLayers.add(new ItemInHandLayer(fakeParent, context.getItemInHandRenderer()));
         customLayers.add(new ElytraLayer(fakeParent, context.getModelSet()));
+        customLayers.add(new CustomHeadLayer(fakeParent, context.getModelSet(), context.getItemInHandRenderer()));
     }
 
     @Override

@@ -4,5 +4,6 @@ public class Config {
 
     public boolean enablePlayerDisguise = true;
     public boolean enableArmorstandDisguise = true;
+    public boolean hideArmorstandHead = false;
 
 }

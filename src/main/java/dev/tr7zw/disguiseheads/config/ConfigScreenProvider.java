@@ -28,6 +28,9 @@ public class ConfigScreenProvider {
                 options.add(getOnOffOption("text.disguiseheads.enable.enableArmorstandDisguise",
                         () -> DisguiseHeadsShared.instance.config.enableArmorstandDisguise,
                         b -> DisguiseHeadsShared.instance.config.enableArmorstandDisguise = b));
+                options.add(getOnOffOption("text.disguiseheads.enable.hideArmorstandHead",
+                        () -> DisguiseHeadsShared.instance.config.hideArmorstandHead,
+                        b -> DisguiseHeadsShared.instance.config.hideArmorstandHead = b));
 
                 // spotless:off
                 //#if MC >= 11900

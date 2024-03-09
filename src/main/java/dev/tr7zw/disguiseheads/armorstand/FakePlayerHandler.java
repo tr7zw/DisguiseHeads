@@ -5,12 +5,14 @@ import java.util.List;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
+import dev.tr7zw.disguiseheads.DisguiseHeadsMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ArmorStandModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.layers.CustomHeadLayer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.client.resources.PlayerSkin.Model;
@@ -80,7 +82,9 @@ public interface FakePlayerHandler<T extends ArmorStand> {
         int r = LivingEntityRenderer.getOverlayCoords(livingEntity, 0);
         targetmodel.renderToBuffer(poseStack, vertices, packedLight, r, 1.0f, 1.0f, 1.0f, bl2 ? 0.15f : 1.0f);
         for (RenderLayer renderLayer : customLayers) {
-            renderLayer.render(poseStack, multiBufferSource, packedLight, livingEntity, 0, 0, tick, 0, h, j);
+            if(!DisguiseHeadsMod.instance.config.hideArmorstandHead || !(renderLayer instanceof CustomHeadLayer)) {
+                renderLayer.render(poseStack, multiBufferSource, packedLight, livingEntity, 0, 0, tick, 0, h, j);
+            }
         }
         poseStack.popPose();
         // super.render(livingEntity, f, g, PoseStack, MultiBufferSource, i);
