@@ -5,7 +5,7 @@ import java.util.List;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import dev.tr7zw.disguiseheads.DisguiseHeadsMod;
+import dev.tr7zw.disguiseheads.DisguiseHeadsShared;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ArmorStandModel;
 import net.minecraft.client.model.PlayerModel;
@@ -82,7 +82,7 @@ public interface FakePlayerHandler<T extends ArmorStand> {
         int r = LivingEntityRenderer.getOverlayCoords(livingEntity, 0);
         targetmodel.renderToBuffer(poseStack, vertices, packedLight, r, 1.0f, 1.0f, 1.0f, bl2 ? 0.15f : 1.0f);
         for (RenderLayer renderLayer : customLayers) {
-            if(!DisguiseHeadsMod.instance.config.hideArmorstandHead || !(renderLayer instanceof CustomHeadLayer)) {
+            if (!DisguiseHeadsShared.instance.config.hideArmorstandHead || !(renderLayer instanceof CustomHeadLayer)) {
                 renderLayer.render(poseStack, multiBufferSource, packedLight, livingEntity, 0, 0, tick, 0, h, j);
             }
         }
