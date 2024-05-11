@@ -12,8 +12,6 @@ import dev.tr7zw.disguiseheads.util.SkinUtil;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -37,15 +35,9 @@ public abstract class AbstractClientPlayerEntity extends Player {
         ItemStack itemStack = getItemBySlot(EquipmentSlot.HEAD);
         Item item = itemStack.getItem();
         if (item instanceof BlockItem blockitem && blockitem.getBlock() instanceof AbstractSkullBlock) {
-            GameProfile gameProfile = null;
-            if (itemStack.hasTag()) {
-                CompoundTag compoundTag = itemStack.getTag();
-                if (compoundTag.contains("SkullOwner", 10)) {
-                    gameProfile = NbtUtils.readGameProfile(compoundTag.getCompound("SkullOwner"));
-                }
-                if (gameProfile != null) {
-                    info.setReturnValue(SkinUtil.getSkin(gameProfile));
-                }
+            GameProfile gameProfile = SkinUtil.getGameProfile(itemStack);
+            if (gameProfile != null) {
+                info.setReturnValue(SkinUtil.getSkin(gameProfile));
             }
         }
     }

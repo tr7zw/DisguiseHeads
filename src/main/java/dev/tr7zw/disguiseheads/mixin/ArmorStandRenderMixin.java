@@ -31,8 +31,6 @@ import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.resources.PlayerSkin;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -87,15 +85,9 @@ public abstract class ArmorStandRenderMixin extends EntityRenderer implements Fa
         ItemStack itemStack = entity.getItemBySlot(EquipmentSlot.HEAD);
         Item item = itemStack.getItem();
         if (item instanceof BlockItem blockitem && blockitem.getBlock() instanceof AbstractSkullBlock) {
-            GameProfile gameProfile = null;
-            if (itemStack.hasTag()) {
-                CompoundTag compoundTag = itemStack.getTag();
-                if (compoundTag.contains("SkullOwner", 10)) {
-                    gameProfile = NbtUtils.readGameProfile(compoundTag.getCompound("SkullOwner"));
-                }
-                if (gameProfile != null) {
-                    return SkinUtil.getSkin(gameProfile);
-                }
+            GameProfile gameProfile = SkinUtil.getGameProfile(itemStack);
+            if (gameProfile != null) {
+                return SkinUtil.getSkin(gameProfile);
             }
         }
         return null;
@@ -128,7 +120,13 @@ public abstract class ArmorStandRenderMixin extends EntityRenderer implements Fa
     @Override
     public void setupTransformsRedirect(ArmorStand entity, PoseStack matrices, float animationProgress, float bodyYaw,
             float tickDelta) {
-        setupRotations(entity, matrices, animationProgress, bodyYaw, tickDelta);
+        // spotless:off 
+        //#if MC <= 12004
+        //$$ setupRotations(entity, matrices, animationProgress, bodyYaw, tickDelta);
+        //#else
+        setupRotations(entity, matrices, animationProgress, bodyYaw, tickDelta, entity.getScale());
+        //#endif
+        //spotless:on
     }
 
     @Override
@@ -154,9 +152,16 @@ public abstract class ArmorStandRenderMixin extends EntityRenderer implements Fa
     @Shadow
     abstract float getBob(LivingEntity livingBase, float partialTick);
 
+    // spotless:off 
+  //#if MC <= 12004
+  //$$  @Shadow
+  //$$  abstract void setupRotations(LivingEntity entityLiving, PoseStack poseStack, float ageInTicks, float rotationYaw,
+  //$$          float partialTicks);
+    //#else
     @Shadow
-    abstract void setupRotations(LivingEntity entityLiving, PoseStack poseStack, float ageInTicks, float rotationYaw,
-            float partialTicks);
+    abstract void setupRotations(LivingEntity livingEntity, PoseStack poseStack, float f, float g, float h, float i);
+  //#endif
+  //spotless:on
 
     @Shadow
     abstract void scale(LivingEntity livingEntity, PoseStack poseStack, float partialTickTime);
