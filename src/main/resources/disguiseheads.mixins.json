@@ -7,7 +7,8 @@
     "client": [
         "AbstractClientPlayerEntity",
         "CustomHeadLayerMixin",
-        "ArmorStandRenderMixin"
+        "ArmorStandRenderMixin",
+        "EntityRendererMixin"
     ],
     "injectors": {
         "defaultRequire": 1

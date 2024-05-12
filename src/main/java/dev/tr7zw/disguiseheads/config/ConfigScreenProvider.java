@@ -25,6 +25,9 @@ public class ConfigScreenProvider {
                 options.add(getOnOffOption("text.disguiseheads.enable.enablePlayerDisguise",
                         () -> DisguiseHeadsShared.instance.config.enablePlayerDisguise,
                         b -> DisguiseHeadsShared.instance.config.enablePlayerDisguise = b));
+                options.add(getOnOffOption("text.disguiseheads.enable.changeNameToDisguise",
+                        () -> DisguiseHeadsShared.instance.config.changeNameToDisguise,
+                        b -> DisguiseHeadsShared.instance.config.changeNameToDisguise = b));
                 options.add(getOnOffOption("text.disguiseheads.enable.enableArmorstandDisguise",
                         () -> DisguiseHeadsShared.instance.config.enableArmorstandDisguise,
                         b -> DisguiseHeadsShared.instance.config.enableArmorstandDisguise = b));

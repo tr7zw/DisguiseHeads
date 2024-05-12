@@ -5,5 +5,7 @@
     "text.disguiseheads.enable.enableArmorstandDisguise": "Enable Armorstand Disguise",
     "text.disguiseheads.enable.enableArmorstandDisguise.tooltip": "Disguise armorstands wearing a player head",
     "text.disguiseheads.enable.hideArmorstandHead": "Hide Armorstand Head",
-    "text.disguiseheads.enable.hideArmorstandHead.tooltip": "Hide the head of armorstands wearing a player head, so the head has the same size as a normal player head"
+    "text.disguiseheads.enable.hideArmorstandHead.tooltip": "Hide the head of armorstands wearing a player head, so the head has the same size as a normal player head",
+    "text.disguiseheads.enable.changeNameToDisguise": "Change Name to Disguise",
+    "text.disguiseheads.enable.changeNameToDisguise.tooltip": "Change the name of the disguised Player to the name of the Player head(only the name above the Player, not affecting chat/tab/etc)"
 }
