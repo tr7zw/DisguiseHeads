@@ -6,10 +6,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.core.UUIDUtil;
 import com.mojang.authlib.GameProfile;
-import com.mojang.blaze3d.platform.NativeImage;
-
-import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 //spotless:off 
 //#if MC >= 12002
@@ -28,6 +28,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.component.ResolvableProfile;
 //#endif
 //spotless:on
+import net.minecraft.world.level.block.AbstractSkullBlock;
 
 public class SkinUtil {
 
@@ -88,6 +89,18 @@ public class SkinUtil {
         }
 
         return uUID;
+    }
+    
+    public static PlayerSkin getHeadTextureLocation(ArmorStand entity) {
+        ItemStack itemStack = entity.getItemBySlot(EquipmentSlot.HEAD);
+        Item item = itemStack.getItem();
+        if (item instanceof BlockItem blockitem && blockitem.getBlock() instanceof AbstractSkullBlock) {
+            GameProfile gameProfile = SkinUtil.getGameProfile(itemStack);
+            if (gameProfile != null) {
+                return SkinUtil.getSkin(gameProfile);
+            }
+        }
+        return null;
     }
 
 }

@@ -41,8 +41,6 @@ public interface FakePlayerHandler<T extends ArmorStand> {
 
     public boolean isVisibleRedirect(T entity);
 
-    public PlayerSkin getHeadTextureLocation(ArmorStand entity);
-
     public PlayerModel<ArmorStand> getDefaultModel();
 
     public PlayerModel<ArmorStand> getSlimModel();
@@ -81,6 +79,7 @@ public interface FakePlayerHandler<T extends ArmorStand> {
         boolean bl2 = !bl && !livingEntity.isInvisibleTo(minecraft.player);
         int r = LivingEntityRenderer.getOverlayCoords(livingEntity, 0);
         targetmodel.renderToBuffer(poseStack, vertices, packedLight, r, 1.0f, 1.0f, 1.0f, bl2 ? 0.15f : 1.0f);
+        ArmorstandCapeLayer.playerModel = targetmodel; // dumb workaround
         for (RenderLayer renderLayer : customLayers) {
             if (!DisguiseHeadsShared.instance.config.hideArmorstandHead || !(renderLayer instanceof CustomHeadLayer)) {
                 renderLayer.render(poseStack, multiBufferSource, packedLight, livingEntity, 0, 0, tick, 0, h, j);

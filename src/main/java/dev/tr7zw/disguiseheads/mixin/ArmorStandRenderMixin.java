@@ -9,10 +9,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import dev.tr7zw.disguiseheads.DisguiseHeadsShared;
+import dev.tr7zw.disguiseheads.armorstand.ArmorstandCapeLayer;
 import dev.tr7zw.disguiseheads.armorstand.FakePlayerHandler;
 import dev.tr7zw.disguiseheads.util.SkinUtil;
 import net.minecraft.client.model.ArmorStandArmorModel;
@@ -33,13 +33,8 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.AbstractSkullBlock;
 
 @SuppressWarnings("rawtypes")
 @Mixin(LivingEntityRenderer.class)
@@ -63,7 +58,7 @@ public abstract class ArmorStandRenderMixin extends EntityRenderer implements Fa
 
             @Override
             public ResourceLocation getTextureLocation(ArmorStand entity) {
-                return getHeadTextureLocation(entity).texture();
+                return SkinUtil.getHeadTextureLocation(entity).texture();
             }
 
             @Override
@@ -77,20 +72,8 @@ public abstract class ArmorStandRenderMixin extends EntityRenderer implements Fa
                 context.getModelManager()));
         customLayers.add(new ItemInHandLayer(fakeParent, context.getItemInHandRenderer()));
         customLayers.add(new ElytraLayer(fakeParent, context.getModelSet()));
+        customLayers.add(new ArmorstandCapeLayer(fakeParent));
         customLayers.add(new CustomHeadLayer(fakeParent, context.getModelSet(), context.getItemInHandRenderer()));
-    }
-
-    @Override
-    public PlayerSkin getHeadTextureLocation(ArmorStand entity) {
-        ItemStack itemStack = entity.getItemBySlot(EquipmentSlot.HEAD);
-        Item item = itemStack.getItem();
-        if (item instanceof BlockItem blockitem && blockitem.getBlock() instanceof AbstractSkullBlock) {
-            GameProfile gameProfile = SkinUtil.getGameProfile(itemStack);
-            if (gameProfile != null) {
-                return SkinUtil.getSkin(gameProfile);
-            }
-        }
-        return null;
     }
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
@@ -98,7 +81,7 @@ public abstract class ArmorStandRenderMixin extends EntityRenderer implements Fa
             MultiBufferSource buffer, int packedLight, CallbackInfo info) {
         if (livingEntity instanceof ArmorStand armorStand && !armorStand.isMarker() && !armorStand.isInvisible()
                 && DisguiseHeadsShared.instance.config.enableArmorstandDisguise) {
-            PlayerSkin skin = getHeadTextureLocation(armorStand);
+            PlayerSkin skin = SkinUtil.getHeadTextureLocation(armorStand);
             if (skin != null && getModel() instanceof ArmorStandModel asm) {
                 float f = Mth.rotLerp(partialTicks, livingEntity.yBodyRotO, livingEntity.yBodyRot);
                 float g = Mth.rotLerp(partialTicks, livingEntity.yHeadRotO, livingEntity.yHeadRot);
