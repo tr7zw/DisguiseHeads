@@ -6,5 +6,6 @@ public class Config {
     public boolean enableArmorstandDisguise = false;
     public boolean hideArmorstandHead = false;
     public boolean changeNameToDisguise = false;
+    public boolean enableArmorstandCapes = false;
 
 }

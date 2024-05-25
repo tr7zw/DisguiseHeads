@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 
 import dev.tr7zw.disguiseheads.DisguiseHeadsShared;
+import dev.tr7zw.disguiseheads.PlayerModelAccess;
 import dev.tr7zw.disguiseheads.util.SkinUtil;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;
@@ -33,7 +34,8 @@ public class ArmorstandCapeLayer extends RenderLayer<ArmorStand, EntityModel<Arm
             float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw,
             float headPitch) {
         if (!livingEntity.isMarker() && !livingEntity.isInvisible()
-                && DisguiseHeadsShared.instance.config.enableArmorstandDisguise) {
+                && DisguiseHeadsShared.instance.config.enableArmorstandDisguise
+                && DisguiseHeadsShared.instance.config.enableArmorstandCapes) {
             PlayerSkin playerSkin = SkinUtil.getHeadTextureLocation(livingEntity);
             if (playerSkin != null && playerSkin.capeTexture() != null) {
                 ItemStack itemStack = livingEntity.getItemBySlot(EquipmentSlot.CHEST);
@@ -67,14 +69,16 @@ public class ArmorstandCapeLayer extends RenderLayer<ArmorStand, EntityModel<Arm
                     poseStack.mulPose(Axis.ZP.rotationDegrees(l / 2.0F));
                     poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - l / 2.0F));
                     VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entitySolid(playerSkin.capeTexture()));
-                    if(playerModel != null) {
-                        // never crash because of this dumb hack
-                        if(livingEntity.isBaby()) {
-                        float scale = 1.0F / 2;
+                    // never crash because of this dumb hack
+                    if (playerModel != null) {
+                        playerModel.body.translateAndRotate(poseStack);
+                        if (livingEntity.isBaby()) {
+                            float scale = 1.0F / 2;
                             poseStack.scale(scale, scale, scale);
                             poseStack.translate(0, 1.5, 0.3F);
                         }
-                        playerModel.renderCloak(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY);
+                        ((PlayerModelAccess) playerModel).getCapeModel().render(poseStack, vertexConsumer, packedLight,
+                                OverlayTexture.NO_OVERLAY);
                     }
                     poseStack.popPose();
                 }

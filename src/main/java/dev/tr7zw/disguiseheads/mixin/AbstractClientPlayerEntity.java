@@ -32,7 +32,7 @@ public abstract class AbstractClientPlayerEntity extends Player {
         if (!DisguiseHeadsShared.instance.config.enablePlayerDisguise) {
             return;
         }
-        ItemStack itemStack = getItemBySlot(EquipmentSlot.HEAD);
+        ItemStack itemStack = getInventory().armor.get(EquipmentSlot.HEAD.getIndex());
         Item item = itemStack.getItem();
         if (item instanceof BlockItem blockitem && blockitem.getBlock() instanceof AbstractSkullBlock) {
             GameProfile gameProfile = SkinUtil.getGameProfile(itemStack);

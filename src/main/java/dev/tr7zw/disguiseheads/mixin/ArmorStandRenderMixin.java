@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import dev.tr7zw.disguiseheads.DisguiseHeadsShared;
+import dev.tr7zw.disguiseheads.armorstand.ArmorStandElytraLayer;
 import dev.tr7zw.disguiseheads.armorstand.ArmorstandCapeLayer;
 import dev.tr7zw.disguiseheads.armorstand.FakePlayerHandler;
 import dev.tr7zw.disguiseheads.util.SkinUtil;
@@ -26,7 +27,6 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.CustomHeadLayer;
-import net.minecraft.client.renderer.entity.layers.ElytraLayer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
@@ -71,7 +71,7 @@ public abstract class ArmorStandRenderMixin extends EntityRenderer implements Fa
                 new ArmorStandArmorModel(context.bakeLayer(ModelLayers.ARMOR_STAND_OUTER_ARMOR)),
                 context.getModelManager()));
         customLayers.add(new ItemInHandLayer(fakeParent, context.getItemInHandRenderer()));
-        customLayers.add(new ElytraLayer(fakeParent, context.getModelSet()));
+        customLayers.add(new ArmorStandElytraLayer(fakeParent, context.getModelSet()));
         customLayers.add(new ArmorstandCapeLayer(fakeParent));
         customLayers.add(new CustomHeadLayer(fakeParent, context.getModelSet(), context.getItemInHandRenderer()));
     }
