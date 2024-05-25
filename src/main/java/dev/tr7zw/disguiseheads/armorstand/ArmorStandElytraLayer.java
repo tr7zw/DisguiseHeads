@@ -5,8 +5,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import dev.tr7zw.disguiseheads.DisguiseHeadsShared;
 import dev.tr7zw.disguiseheads.util.SkinUtil;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.model.ElytraModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.EntityModelSet;
@@ -25,7 +23,6 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-@Environment(EnvType.CLIENT)
 public class ArmorStandElytraLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
     private static final ResourceLocation WINGS_LOCATION = new ResourceLocation("textures/entity/elytra.png");
     private final ElytraModel<T> elytraModel;
