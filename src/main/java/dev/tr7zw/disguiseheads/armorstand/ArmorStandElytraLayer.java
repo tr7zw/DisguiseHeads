@@ -56,6 +56,7 @@ public class ArmorStandElytraLayer<T extends LivingEntity, M extends EntityModel
             poseStack.translate(0.0F, 0.0F, 0.125F);
             this.getParentModel().copyPropertiesTo(this.elytraModel);
             this.elytraModel.setupAnim(livingEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+            this.elytraModel.young = livingEntity.isBaby();
             // spotless:off
             //#if MC >= 12100
             VertexConsumer vertexConsumer = ItemRenderer.getArmorFoilBuffer(buffer,
