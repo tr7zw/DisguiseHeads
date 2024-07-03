@@ -90,7 +90,7 @@ public class SkinUtil {
 
         return uUID;
     }
-    
+
     public static PlayerSkin getHeadTextureLocation(ArmorStand entity) {
         ItemStack itemStack = entity.getItemBySlot(EquipmentSlot.HEAD);
         Item item = itemStack.getItem();

@@ -74,11 +74,17 @@ public interface FakePlayerHandler<T extends ArmorStand> {
             }
         }
 
-        Minecraft minecraft = Minecraft.getInstance();
-        boolean bl = this.isVisibleRedirect(livingEntity);
-        boolean bl2 = !bl && !livingEntity.isInvisibleTo(minecraft.player);
         int r = LivingEntityRenderer.getOverlayCoords(livingEntity, 0);
-        targetmodel.renderToBuffer(poseStack, vertices, packedLight, r, 1.0f, 1.0f, 1.0f, bl2 ? 0.15f : 1.0f);
+        // spotless:off
+        //#if MC >= 12100
+        targetmodel.renderToBuffer(poseStack, vertices, packedLight, r);
+        //#else
+        //$$ Minecraft minecraft = Minecraft.getInstance();
+        //$$ boolean bl = this.isVisibleRedirect(livingEntity);
+        //$$ boolean bl2 = !bl && !livingEntity.isInvisibleTo(minecraft.player);
+        //$$ targetmodel.renderToBuffer(poseStack, vertices, packedLight, r, 1.0f, 1.0f, 1.0f, bl2 ? 0.15f : 1.0f);
+        //#endif
+        //spotless:on
         ArmorstandCapeLayer.playerModel = targetmodel; // dumb workaround
         for (RenderLayer renderLayer : customLayers) {
             if (!DisguiseHeadsShared.instance.config.hideArmorstandHead || !(renderLayer instanceof CustomHeadLayer)) {

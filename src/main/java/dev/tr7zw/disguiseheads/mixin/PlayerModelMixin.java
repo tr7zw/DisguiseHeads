@@ -17,5 +17,5 @@ public class PlayerModelMixin implements PlayerModelAccess {
     public ModelPart getCapeModel() {
         return cloak;
     }
-    
+
 }

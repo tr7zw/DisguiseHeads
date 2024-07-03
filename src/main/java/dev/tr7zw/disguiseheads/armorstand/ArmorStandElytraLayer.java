@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import dev.tr7zw.disguiseheads.DisguiseHeadsShared;
 import dev.tr7zw.disguiseheads.util.SkinUtil;
+import dev.tr7zw.util.NMSHelper;
 import net.minecraft.client.model.ElytraModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.EntityModelSet;
@@ -24,7 +25,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 public class ArmorStandElytraLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
-    private static final ResourceLocation WINGS_LOCATION = new ResourceLocation("textures/entity/elytra.png");
+    private static final ResourceLocation WINGS_LOCATION = NMSHelper.getResourceLocation("textures/entity/elytra.png");
     private final ElytraModel<T> elytraModel;
 
     public ArmorStandElytraLayer(RenderLayerParent<T, M> renderer, EntityModelSet modelSet) {
@@ -55,10 +56,17 @@ public class ArmorStandElytraLayer<T extends LivingEntity, M extends EntityModel
             poseStack.translate(0.0F, 0.0F, 0.125F);
             this.getParentModel().copyPropertiesTo(this.elytraModel);
             this.elytraModel.setupAnim(livingEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+            // spotless:off
+            //#if MC >= 12100
             VertexConsumer vertexConsumer = ItemRenderer.getArmorFoilBuffer(buffer,
-                    RenderType.armorCutoutNoCull(resourceLocation), false, itemStack.hasFoil());
-            this.elytraModel.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, 1.0F,
-                    1.0F, 1.0F, 1.0F);
+                    RenderType.armorCutoutNoCull(resourceLocation), itemStack.hasFoil());
+            this.elytraModel.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY);
+            //#else
+            //$$ VertexConsumer vertexConsumer = ItemRenderer.getArmorFoilBuffer(buffer,
+            //$$         RenderType.armorCutoutNoCull(resourceLocation), false, itemStack.hasFoil());
+            //$$ this.elytraModel.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+            //#endif
+            //spotless:on
             poseStack.popPose();
         }
     }
