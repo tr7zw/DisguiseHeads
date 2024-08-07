@@ -28,7 +28,7 @@ public interface FakePlayerHandler<T extends ArmorStand> {
             List<RenderLayer> customLayers) {
         PlayerModel<ArmorStand> model = skin.model() == Model.WIDE ? getDefaultModel() : getSlimModel();
         entityModel.copyPropertiesTo(model);
-        VertexConsumer vertices = multiBufferSource.getBuffer(RenderType.entityCutoutNoCull(skin.texture()));
+        VertexConsumer vertices = multiBufferSource.getBuffer(RenderType.entityTranslucent(skin.texture()));
         renderPlayerAS(livingEntity, f, g, poseStack, multiBufferSource, i, vertices, model, customLayers);
     }
 
