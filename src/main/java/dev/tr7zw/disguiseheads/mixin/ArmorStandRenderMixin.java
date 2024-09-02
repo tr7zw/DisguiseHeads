@@ -31,6 +31,7 @@ import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.resources.PlayerSkin;
+import net.minecraft.client.resources.PlayerSkin.Model;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -47,7 +48,9 @@ public abstract class ArmorStandRenderMixin extends EntityRenderer implements Fa
     private PlayerModel<ArmorStand> defaultModel;
     private PlayerModel<ArmorStand> thinModel;
     private RenderLayerParent<ArmorStand, EntityModel<ArmorStand>> fakeParent;
+    private RenderLayerParent<ArmorStand, EntityModel<ArmorStand>> fakeParentSlim;
     private List<RenderLayer> customLayers = new ArrayList<>();
+    private List<RenderLayer> customLayersSlim = new ArrayList<>();
 
     @SuppressWarnings("unchecked")
     @Inject(method = "<init>", at = @At("RETURN"))
@@ -66,6 +69,18 @@ public abstract class ArmorStandRenderMixin extends EntityRenderer implements Fa
                 return defaultModel;
             }
         };
+        fakeParentSlim = new RenderLayerParent<ArmorStand, EntityModel<ArmorStand>>() {
+
+            @Override
+            public ResourceLocation getTextureLocation(ArmorStand entity) {
+                return SkinUtil.getHeadTextureLocation(entity).texture();
+            }
+
+            @Override
+            public EntityModel<ArmorStand> getModel() {
+                return thinModel;
+            }
+        };
         customLayers.add(new HumanoidArmorLayer(fakeParent,
                 new ArmorStandArmorModel(context.bakeLayer(ModelLayers.ARMOR_STAND_INNER_ARMOR)),
                 new ArmorStandArmorModel(context.bakeLayer(ModelLayers.ARMOR_STAND_OUTER_ARMOR)),
@@ -74,6 +89,16 @@ public abstract class ArmorStandRenderMixin extends EntityRenderer implements Fa
         customLayers.add(new ArmorStandElytraLayer(fakeParent, context.getModelSet()));
         customLayers.add(new ArmorstandCapeLayer(fakeParent));
         customLayers.add(new CustomHeadLayer(fakeParent, context.getModelSet(), context.getItemInHandRenderer()));
+        // duplicate for slim
+        customLayersSlim.add(new HumanoidArmorLayer(fakeParentSlim,
+                new ArmorStandArmorModel(context.bakeLayer(ModelLayers.ARMOR_STAND_INNER_ARMOR)),
+                new ArmorStandArmorModel(context.bakeLayer(ModelLayers.ARMOR_STAND_OUTER_ARMOR)),
+                context.getModelManager()));
+        customLayersSlim.add(new ItemInHandLayer(fakeParentSlim, context.getItemInHandRenderer()));
+        customLayersSlim.add(new ArmorStandElytraLayer(fakeParentSlim, context.getModelSet()));
+        customLayersSlim.add(new ArmorstandCapeLayer(fakeParentSlim));
+        customLayersSlim
+                .add(new CustomHeadLayer(fakeParentSlim, context.getModelSet(), context.getItemInHandRenderer()));
     }
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
@@ -89,7 +114,7 @@ public abstract class ArmorStandRenderMixin extends EntityRenderer implements Fa
                 float j = Mth.lerp(partialTicks, livingEntity.xRotO, livingEntity.getXRot());
                 asm.setupAnim(armorStand, 0, 0, getBob(livingEntity, partialTicks), h, j);
                 renderFakePlayer(armorStand, entityYaw, partialTicks, poseStack, buffer, packedLight, skin, asm,
-                        customLayers);
+                        skin.model() == Model.WIDE ? customLayers : customLayersSlim);
                 info.cancel();
             }
         }
