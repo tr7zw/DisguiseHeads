@@ -7,6 +7,7 @@ import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.core.UUIDUtil;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -91,7 +92,7 @@ public class SkinUtil {
         return uUID;
     }
 
-    public static PlayerSkin getHeadTextureLocation(ArmorStand entity) {
+    public static PlayerSkin getHeadTextureLocation(LivingEntity entity) {
         ItemStack itemStack = entity.getItemBySlot(EquipmentSlot.HEAD);
         Item item = itemStack.getItem();
         if (item instanceof BlockItem blockitem && blockitem.getBlock() instanceof AbstractSkullBlock) {

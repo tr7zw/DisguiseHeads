@@ -6,9 +6,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import dev.tr7zw.disguiseheads.DisguiseHeadsShared;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ArmorStandModel;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
@@ -18,16 +20,43 @@ import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.client.resources.PlayerSkin.Model;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.decoration.ArmorStand;
 
-public interface FakePlayerHandler<T extends ArmorStand> {
+public interface FakePlayerHandler<T extends LivingEntity, V extends EntityModel<T>> {
 
     @SuppressWarnings("rawtypes")
     public default void renderFakePlayer(T livingEntity, float f, float g, PoseStack poseStack,
-            MultiBufferSource multiBufferSource, int i, PlayerSkin skin, ArmorStandModel entityModel,
+            MultiBufferSource multiBufferSource, int i, PlayerSkin skin, V entityModel,
             List<RenderLayer> customLayers) {
-        PlayerModel<ArmorStand> model = skin.model() == Model.WIDE ? getDefaultModel() : getSlimModel();
+        PlayerModel<T> model = skin.model() == Model.WIDE ? getDefaultModel() : getSlimModel();
         entityModel.copyPropertiesTo(model);
+        if(entityModel instanceof HumanoidModel human) {
+            model.leftArmPose = human.leftArmPose;
+            model.rightArmPose = human.rightArmPose;
+            ((HumanoidModel) entityModel).copyPropertiesTo(model);
+        }
+        if(entityModel instanceof HierarchicalModel hir) {
+            hir.getAnyDescendantWithName("left_leg").ifPresent(leg -> {
+                model.leftLeg.copyFrom((ModelPart) leg);
+            });
+            hir.getAnyDescendantWithName("right_leg").ifPresent(leg -> {
+                model.rightLeg.copyFrom((ModelPart) leg);
+            });
+            hir.getAnyDescendantWithName("head").ifPresent(head -> {
+                model.getHead().copyFrom((ModelPart) head);
+            });
+            hir.getAnyDescendantWithName("left_arm").ifPresent(arm -> {
+                model.leftArm.copyFrom((ModelPart) arm);
+            });
+            hir.getAnyDescendantWithName("right_arm").ifPresent(arm -> {
+                model.rightArm.copyFrom((ModelPart) arm);
+            });
+        }
+        model.hat.copyFrom(model.head);
+        model.leftPants.copyFrom(model.leftLeg);
+        model.rightPants.copyFrom(model.rightLeg);
+        model.leftSleeve.copyFrom(model.leftArm);
+        model.rightSleeve.copyFrom(model.rightArm);
+        model.jacket.copyFrom(model.body);
         VertexConsumer vertices = multiBufferSource.getBuffer(RenderType.entityTranslucent(skin.texture()));
         renderPlayerAS(livingEntity, f, g, poseStack, multiBufferSource, i, vertices, model, customLayers);
     }
@@ -41,18 +70,18 @@ public interface FakePlayerHandler<T extends ArmorStand> {
 
     public boolean isVisibleRedirect(T entity);
 
-    public PlayerModel<ArmorStand> getDefaultModel();
+    public PlayerModel<T> getDefaultModel();
 
-    public PlayerModel<ArmorStand> getSlimModel();
+    public PlayerModel<T> getSlimModel();
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public default void renderPlayerAS(T livingEntity, float f, float tick, PoseStack poseStack,
             MultiBufferSource multiBufferSource, int packedLight, VertexConsumer vertices,
-            PlayerModel<ArmorStand> targetmodel, List<RenderLayer> customLayers) {
+            PlayerModel<T> targetmodel, List<RenderLayer> customLayers) {
         poseStack.pushPose();
         float scale = 1;
         poseStack.scale(scale, scale, scale);
-        targetmodel.attackTime = 0;
+        targetmodel.attackTime = livingEntity.getAttackAnim(tick);
         targetmodel.riding = livingEntity.isPassenger();
         targetmodel.young = livingEntity.isBaby();
         targetmodel.crouching = false;
@@ -61,7 +90,7 @@ public interface FakePlayerHandler<T extends ArmorStand> {
         if (livingEntity.isPassenger() && livingEntity.getVehicle() instanceof LivingEntity veh) {
             h = Mth.rotLerp(tick, veh.yBodyRotO, veh.yBodyRot);
         }
-        float o = 0;// getAnimationProgressRedirect(livingEntity, tick);
+        float o = getAnimationProgressRedirect(livingEntity, tick);
         this.setupTransformsRedirect(livingEntity, poseStack, o, h, tick);
         poseStack.scale(-1.0f, -1.0f, 1.0f);
         this.scaleRedirect(livingEntity, poseStack, tick);

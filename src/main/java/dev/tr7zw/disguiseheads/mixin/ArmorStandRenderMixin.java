@@ -17,8 +17,8 @@ import dev.tr7zw.disguiseheads.armorstand.ArmorstandCapeLayer;
 import dev.tr7zw.disguiseheads.armorstand.FakePlayerHandler;
 import dev.tr7zw.disguiseheads.util.SkinUtil;
 import net.minecraft.client.model.ArmorStandArmorModel;
-import net.minecraft.client.model.ArmorStandModel;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -35,20 +35,19 @@ import net.minecraft.client.resources.PlayerSkin.Model;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.decoration.ArmorStand;
 
 @SuppressWarnings("rawtypes")
 @Mixin(LivingEntityRenderer.class)
-public abstract class ArmorStandRenderMixin extends EntityRenderer implements FakePlayerHandler<ArmorStand> {
+public abstract class ArmorStandRenderMixin<T extends LivingEntity, V extends EntityModel<T>> extends EntityRenderer implements FakePlayerHandler<T, V> {
 
     protected ArmorStandRenderMixin(Context context) {
         super(context);
     }
 
-    private PlayerModel<ArmorStand> defaultModel;
-    private PlayerModel<ArmorStand> thinModel;
-    private RenderLayerParent<ArmorStand, EntityModel<ArmorStand>> fakeParent;
-    private RenderLayerParent<ArmorStand, EntityModel<ArmorStand>> fakeParentSlim;
+    private PlayerModel<T> defaultModel;
+    private PlayerModel<T> thinModel;
+    private RenderLayerParent<T, EntityModel<T>> fakeParent;
+    private RenderLayerParent<T, EntityModel<T>> fakeParentSlim;
     private List<RenderLayer> customLayers = new ArrayList<>();
     private List<RenderLayer> customLayersSlim = new ArrayList<>();
 
@@ -57,27 +56,27 @@ public abstract class ArmorStandRenderMixin extends EntityRenderer implements Fa
     public void init(Context context, EntityModel model, float shadowRadius, CallbackInfo info) {
         defaultModel = new PlayerModel<>(context.bakeLayer(ModelLayers.PLAYER), false);
         thinModel = new PlayerModel<>(context.bakeLayer(ModelLayers.PLAYER_SLIM), true);
-        fakeParent = new RenderLayerParent<ArmorStand, EntityModel<ArmorStand>>() {
+        fakeParent = new RenderLayerParent<T, EntityModel<T>>() {
 
             @Override
-            public ResourceLocation getTextureLocation(ArmorStand entity) {
+            public ResourceLocation getTextureLocation(T entity) {
                 return SkinUtil.getHeadTextureLocation(entity).texture();
             }
 
             @Override
-            public EntityModel<ArmorStand> getModel() {
+            public EntityModel<T> getModel() {
                 return defaultModel;
             }
         };
-        fakeParentSlim = new RenderLayerParent<ArmorStand, EntityModel<ArmorStand>>() {
+        fakeParentSlim = new RenderLayerParent<T, EntityModel<T>>() {
 
             @Override
-            public ResourceLocation getTextureLocation(ArmorStand entity) {
+            public ResourceLocation getTextureLocation(T entity) {
                 return SkinUtil.getHeadTextureLocation(entity).texture();
             }
 
             @Override
-            public EntityModel<ArmorStand> getModel() {
+            public EntityModel<T> getModel() {
                 return thinModel;
             }
         };
@@ -104,16 +103,31 @@ public abstract class ArmorStandRenderMixin extends EntityRenderer implements Fa
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     public void render(LivingEntity livingEntity, float entityYaw, float partialTicks, PoseStack poseStack,
             MultiBufferSource buffer, int packedLight, CallbackInfo info) {
-        if (livingEntity instanceof ArmorStand armorStand && !armorStand.isMarker() && !armorStand.isInvisible()
+        if (!livingEntity.isInvisible()
                 && DisguiseHeadsShared.instance.config.enableArmorstandDisguise) {
-            PlayerSkin skin = SkinUtil.getHeadTextureLocation(armorStand);
-            if (skin != null && getModel() instanceof ArmorStandModel asm) {
+            PlayerSkin skin = SkinUtil.getHeadTextureLocation(livingEntity);
+            if (skin != null) {
+                V asm = (V) getModel();
                 float f = Mth.rotLerp(partialTicks, livingEntity.yBodyRotO, livingEntity.yBodyRot);
                 float g = Mth.rotLerp(partialTicks, livingEntity.yHeadRotO, livingEntity.yHeadRot);
                 float h = g - f;
                 float j = Mth.lerp(partialTicks, livingEntity.xRotO, livingEntity.getXRot());
-                asm.setupAnim(armorStand, 0, 0, getBob(livingEntity, partialTicks), h, j);
-                renderFakePlayer(armorStand, entityYaw, partialTicks, poseStack, buffer, packedLight, skin, asm,
+                float limbSwing = 0.0F;
+                float limbSwingAmount = 0.0F;
+                if (!livingEntity.isPassenger() && livingEntity.isAlive()) {
+                        limbSwing = livingEntity.walkAnimation.speed(partialTicks);
+                        limbSwingAmount = livingEntity.walkAnimation.position(partialTicks);
+                        if (livingEntity.isBaby()) {
+                                limbSwingAmount *= 3.0F;
+                        }
+
+                        if (limbSwing > 1.0F) {
+                                limbSwing = 1.0F;
+                        }
+                }
+                asm.prepareMobModel((T) livingEntity, limbSwingAmount, limbSwing, partialTicks);
+                asm.setupAnim((T) livingEntity, limbSwingAmount, limbSwing, getBob(livingEntity, partialTicks), h, j);
+                renderFakePlayer((T) livingEntity, entityYaw, partialTicks, poseStack, buffer, packedLight, skin, asm,
                         skin.model() == Model.WIDE ? customLayers : customLayersSlim);
                 info.cancel();
             }
@@ -121,12 +135,12 @@ public abstract class ArmorStandRenderMixin extends EntityRenderer implements Fa
     }
 
     @Override
-    public float getAnimationProgressRedirect(ArmorStand entity, float tickDelta) {
+    public float getAnimationProgressRedirect(T entity, float tickDelta) {
         return getBob(entity, tickDelta);
     }
 
     @Override
-    public void setupTransformsRedirect(ArmorStand entity, PoseStack matrices, float animationProgress, float bodyYaw,
+    public void setupTransformsRedirect(T entity, PoseStack matrices, float animationProgress, float bodyYaw,
             float tickDelta) {
         // spotless:off 
         //#if MC <= 12004
@@ -138,22 +152,22 @@ public abstract class ArmorStandRenderMixin extends EntityRenderer implements Fa
     }
 
     @Override
-    public void scaleRedirect(ArmorStand entity, PoseStack matrices, float amount) {
+    public void scaleRedirect(T entity, PoseStack matrices, float amount) {
         scale(entity, matrices, amount);
     }
 
     @Override
-    public boolean isVisibleRedirect(ArmorStand entity) {
+    public boolean isVisibleRedirect(T entity) {
         return isBodyVisible(entity);
     }
 
     @Override
-    public PlayerModel<ArmorStand> getDefaultModel() {
+    public PlayerModel<T> getDefaultModel() {
         return defaultModel;
     }
 
     @Override
-    public PlayerModel<ArmorStand> getSlimModel() {
+    public PlayerModel<T> getSlimModel() {
         return thinModel;
     }
 
