@@ -38,7 +38,8 @@ import net.minecraft.world.entity.LivingEntity;
 
 @SuppressWarnings("rawtypes")
 @Mixin(LivingEntityRenderer.class)
-public abstract class ArmorStandRenderMixin<T extends LivingEntity, V extends EntityModel<T>> extends EntityRenderer implements FakePlayerHandler<T, V> {
+public abstract class ArmorStandRenderMixin<T extends LivingEntity, V extends EntityModel<T>> extends EntityRenderer
+        implements FakePlayerHandler<T, V> {
 
     protected ArmorStandRenderMixin(Context context) {
         super(context);
@@ -103,8 +104,7 @@ public abstract class ArmorStandRenderMixin<T extends LivingEntity, V extends En
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     public void render(LivingEntity livingEntity, float entityYaw, float partialTicks, PoseStack poseStack,
             MultiBufferSource buffer, int packedLight, CallbackInfo info) {
-        if (!livingEntity.isInvisible()
-                && DisguiseHeadsShared.instance.config.enableArmorstandDisguise) {
+        if (!livingEntity.isInvisible() && DisguiseHeadsShared.instance.config.enableArmorstandDisguise) {
             PlayerSkin skin = SkinUtil.getHeadTextureLocation(livingEntity);
             if (skin != null) {
                 V asm = (V) getModel();
@@ -115,15 +115,15 @@ public abstract class ArmorStandRenderMixin<T extends LivingEntity, V extends En
                 float limbSwing = 0.0F;
                 float limbSwingAmount = 0.0F;
                 if (!livingEntity.isPassenger() && livingEntity.isAlive()) {
-                        limbSwing = livingEntity.walkAnimation.speed(partialTicks);
-                        limbSwingAmount = livingEntity.walkAnimation.position(partialTicks);
-                        if (livingEntity.isBaby()) {
-                                limbSwingAmount *= 3.0F;
-                        }
+                    limbSwing = livingEntity.walkAnimation.speed(partialTicks);
+                    limbSwingAmount = livingEntity.walkAnimation.position(partialTicks);
+                    if (livingEntity.isBaby()) {
+                        limbSwingAmount *= 3.0F;
+                    }
 
-                        if (limbSwing > 1.0F) {
-                                limbSwing = 1.0F;
-                        }
+                    if (limbSwing > 1.0F) {
+                        limbSwing = 1.0F;
+                    }
                 }
                 asm.prepareMobModel((T) livingEntity, limbSwingAmount, limbSwing, partialTicks);
                 asm.setupAnim((T) livingEntity, limbSwingAmount, limbSwing, getBob(livingEntity, partialTicks), h, j);

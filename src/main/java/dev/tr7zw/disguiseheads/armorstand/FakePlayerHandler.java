@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import dev.tr7zw.disguiseheads.DisguiseHeadsShared;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -23,18 +24,20 @@ import net.minecraft.world.entity.LivingEntity;
 
 public interface FakePlayerHandler<T extends LivingEntity, V extends EntityModel<T>> {
 
+    static final Minecraft DH_MINECRAFT = Minecraft.getInstance();
+
     @SuppressWarnings("rawtypes")
     public default void renderFakePlayer(T livingEntity, float f, float g, PoseStack poseStack,
             MultiBufferSource multiBufferSource, int i, PlayerSkin skin, V entityModel,
             List<RenderLayer> customLayers) {
         PlayerModel<T> model = skin.model() == Model.WIDE ? getDefaultModel() : getSlimModel();
         entityModel.copyPropertiesTo(model);
-        if(entityModel instanceof HumanoidModel human) {
+        if (entityModel instanceof HumanoidModel human) {
             model.leftArmPose = human.leftArmPose;
             model.rightArmPose = human.rightArmPose;
             ((HumanoidModel) entityModel).copyPropertiesTo(model);
         }
-        if(entityModel instanceof HierarchicalModel hir) {
+        if (entityModel instanceof HierarchicalModel hir) {
             hir.getAnyDescendantWithName("left_leg").ifPresent(leg -> {
                 model.leftLeg.copyFrom((ModelPart) leg);
             });
@@ -76,8 +79,8 @@ public interface FakePlayerHandler<T extends LivingEntity, V extends EntityModel
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public default void renderPlayerAS(T livingEntity, float f, float tick, PoseStack poseStack,
-            MultiBufferSource multiBufferSource, int packedLight, VertexConsumer vertices,
-            PlayerModel<T> targetmodel, List<RenderLayer> customLayers) {
+            MultiBufferSource multiBufferSource, int packedLight, VertexConsumer vertices, PlayerModel<T> targetmodel,
+            List<RenderLayer> customLayers) {
         poseStack.pushPose();
         float scale = 1;
         poseStack.scale(scale, scale, scale);
@@ -108,9 +111,8 @@ public interface FakePlayerHandler<T extends LivingEntity, V extends EntityModel
         //#if MC >= 12100
         targetmodel.renderToBuffer(poseStack, vertices, packedLight, r);
         //#else
-        //$$ Minecraft minecraft = Minecraft.getInstance();
         //$$ boolean bl = this.isVisibleRedirect(livingEntity);
-        //$$ boolean bl2 = !bl && !livingEntity.isInvisibleTo(minecraft.player);
+        //$$ boolean bl2 = !bl && !livingEntity.isInvisibleTo(DH_MINECRAFT.player);
         //$$ targetmodel.renderToBuffer(poseStack, vertices, packedLight, r, 1.0f, 1.0f, 1.0f, bl2 ? 0.15f : 1.0f);
         //#endif
         //spotless:on

@@ -30,11 +30,9 @@ public class ArmorstandCapeLayer<T extends LivingEntity> extends RenderLayer<T, 
     }
 
     @Override
-    public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T livingEntity,
-            float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw,
-            float headPitch) {
-        if (!livingEntity.isInvisible()
-                && DisguiseHeadsShared.instance.config.enableArmorstandDisguise
+    public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T livingEntity, float limbSwing,
+            float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        if (!livingEntity.isInvisible() && DisguiseHeadsShared.instance.config.enableArmorstandDisguise
                 && DisguiseHeadsShared.instance.config.enableArmorstandCapes) {
             PlayerSkin playerSkin = SkinUtil.getHeadTextureLocation(livingEntity);
             if (playerSkin != null && playerSkin.capeTexture() != null) {
