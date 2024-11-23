@@ -104,4 +104,15 @@ public class SkinUtil {
         return null;
     }
 
+    public static PlayerSkin getHeadTextureLocation(ItemStack itemStack) {
+        Item item = itemStack.getItem();
+        if (item instanceof BlockItem blockitem && blockitem.getBlock() instanceof AbstractSkullBlock) {
+            GameProfile gameProfile = SkinUtil.getGameProfile(itemStack);
+            if (gameProfile != null) {
+                return SkinUtil.getSkin(gameProfile);
+            }
+        }
+        return null;
+    }
+
 }
