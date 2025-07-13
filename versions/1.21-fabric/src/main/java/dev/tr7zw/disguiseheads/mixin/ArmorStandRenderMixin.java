@@ -144,13 +144,11 @@ public abstract class ArmorStandRenderMixin<T extends LivingEntity, V extends En
     @Override
     public void setupTransformsRedirect(T entity, PoseStack matrices, float animationProgress, float bodyYaw,
             float tickDelta) {
-        // spotless:off 
         //#if MC <= 12004
         //$$ setupRotations(entity, matrices, animationProgress, bodyYaw, tickDelta);
         //#else
         setupRotations(entity, matrices, animationProgress, bodyYaw, tickDelta, entity.getScale());
         //#endif
-        //spotless:on
     }
 
     @Override
@@ -176,16 +174,14 @@ public abstract class ArmorStandRenderMixin<T extends LivingEntity, V extends En
     @Shadow
     abstract float getBob(LivingEntity livingBase, float partialTick);
 
-    // spotless:off 
-  //#if MC <= 12004
-  //$$  @Shadow
-  //$$  abstract void setupRotations(LivingEntity entityLiving, PoseStack poseStack, float ageInTicks, float rotationYaw,
-  //$$          float partialTicks);
+    //#if MC <= 12004
+    //$$  @Shadow
+    //$$  abstract void setupRotations(LivingEntity entityLiving, PoseStack poseStack, float ageInTicks, float rotationYaw,
+    //$$          float partialTicks);
     //#else
     @Shadow
     abstract void setupRotations(LivingEntity livingEntity, PoseStack poseStack, float f, float g, float h, float i);
-  //#endif
-  //spotless:on
+    //#endif
 
     @Shadow
     abstract void scale(LivingEntity livingEntity, PoseStack poseStack, float partialTickTime);

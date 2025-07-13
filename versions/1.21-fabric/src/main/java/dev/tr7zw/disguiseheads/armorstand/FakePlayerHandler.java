@@ -107,7 +107,6 @@ public interface FakePlayerHandler<T extends LivingEntity, V extends EntityModel
         }
 
         int r = LivingEntityRenderer.getOverlayCoords(livingEntity, 0);
-        // spotless:off
         //#if MC >= 12100
         targetmodel.renderToBuffer(poseStack, vertices, packedLight, r);
         //#else
@@ -115,7 +114,6 @@ public interface FakePlayerHandler<T extends LivingEntity, V extends EntityModel
         //$$ boolean bl2 = !bl && !livingEntity.isInvisibleTo(DH_MINECRAFT.player);
         //$$ targetmodel.renderToBuffer(poseStack, vertices, packedLight, r, 1.0f, 1.0f, 1.0f, bl2 ? 0.15f : 1.0f);
         //#endif
-        //spotless:on
         ArmorstandCapeLayer.playerModel = targetmodel; // dumb workaround
         for (RenderLayer renderLayer : customLayers) {
             if (!DisguiseHeadsShared.instance.config.hideArmorstandHead || !(renderLayer instanceof CustomHeadLayer)) {

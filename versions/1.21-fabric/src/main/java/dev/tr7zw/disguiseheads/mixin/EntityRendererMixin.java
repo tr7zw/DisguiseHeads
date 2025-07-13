@@ -11,7 +11,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import dev.tr7zw.disguiseheads.DisguiseHeadsShared;
 import dev.tr7zw.disguiseheads.util.SkinUtil;
-import dev.tr7zw.util.ComponentProvider;
+import dev.tr7zw.transition.mc.ComponentProvider;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -38,11 +38,9 @@ public abstract class EntityRendererMixin
     @Inject(method = "renderNameTag", cancellable = true, at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;popPose()V", shift = Shift.BY, by = -5))
     private void injected(AbstractClientPlayer player, Component displayName, PoseStack poseStack,
             MultiBufferSource buffer, int packedLight,
-            // spotless:off 
             //#if MC >= 12005
             float f,
             //#endif
-            // spotless:on
             CallbackInfo ci) {
         if (!DisguiseHeadsShared.instance.config.enablePlayerDisguise
                 || !DisguiseHeadsShared.instance.config.changeNameToDisguise) {
@@ -56,13 +54,11 @@ public abstract class EntityRendererMixin
                 MutableComponent mutableComponent = PlayerTeam.formatNameForTeam(player.getTeam(),
                         ComponentProvider.literal(gameProfile.getName()));
                 super.renderNameTag(player, mutableComponent, poseStack, buffer, packedLight
-                // spotless:off 
-                        //#if MC >= 12005
+                //#if MC >= 12005
                         , f);
-                        //#else
-                        //$$ );
-                        //#endif
-                        // spotless:on
+                //#else
+                //$$ );
+                //#endif
                 poseStack.popPose();
                 ci.cancel();
                 return;

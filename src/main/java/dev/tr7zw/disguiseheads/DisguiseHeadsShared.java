@@ -13,7 +13,7 @@ import com.google.gson.GsonBuilder;
 
 import dev.tr7zw.disguiseheads.config.Config;
 import dev.tr7zw.disguiseheads.config.ConfigScreenProvider;
-import dev.tr7zw.util.ModLoaderUtil;
+import dev.tr7zw.transition.loader.ModLoaderUtil;
 
 public class DisguiseHeadsShared {
 

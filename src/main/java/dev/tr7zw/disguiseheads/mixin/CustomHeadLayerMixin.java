@@ -32,9 +32,15 @@ public abstract class CustomHeadLayerMixin extends RenderLayer {
     @Inject(at = @At("HEAD"), method = "render", cancellable = true)
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i,
             LivingEntityRenderState livingEntity, float f, float g, CallbackInfo info) {
-        if (shouldHide(livingEntity.headItem) && livingEntity instanceof PlayerRenderState) {
+        //#if MC >= 12104
+        if (livingEntity instanceof PlayerRenderState ps && DisguiseHeadsShared.instance.config.enablePlayerDisguise
+                && ps.wornHeadProfile != null) {
+            //#else
+            //$$ if (shouldHide(livingEntity.headItem) && livingEntity instanceof PlayerRenderState) {
+            //#endif
             info.cancel();
         }
+
     }
 
     private boolean shouldHide(ItemStack item) {

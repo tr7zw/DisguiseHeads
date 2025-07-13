@@ -12,7 +12,6 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-//spotless:off 
 //#if MC >= 12002
 import net.minecraft.client.resources.PlayerSkin;
 //#else
@@ -28,27 +27,25 @@ import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.component.ResolvableProfile;
 //#endif
-//spotless:on
 import net.minecraft.world.level.block.AbstractSkullBlock;
 
 public class SkinUtil {
 
     public static GameProfile getGameProfile(ItemStack itemStack) {
-        // spotless:off 
         //#if MC >= 12005
-        if(itemStack.getComponents().has(DataComponents.CUSTOM_MODEL_DATA)) {
+        if (itemStack.getComponents().has(DataComponents.CUSTOM_MODEL_DATA)) {
             return null;
         }
         if (itemStack.getComponents().has(DataComponents.PROFILE)) {
             ResolvableProfile resolvableProfile = (ResolvableProfile) itemStack.get(DataComponents.PROFILE);
             if (resolvableProfile != null && !resolvableProfile.isResolved()) {
-                    itemStack.remove(DataComponents.PROFILE);
-                    resolvableProfile.resolve().thenAcceptAsync(
-                                    resolvableProfile2 -> itemStack.set(DataComponents.PROFILE, resolvableProfile2),
-                                    Minecraft.getInstance());
-                    resolvableProfile = null;
+                itemStack.remove(DataComponents.PROFILE);
+                resolvableProfile.resolve().thenAcceptAsync(
+                        resolvableProfile2 -> itemStack.set(DataComponents.PROFILE, resolvableProfile2),
+                        Minecraft.getInstance());
+                resolvableProfile = null;
             }
-            if(resolvableProfile != null) {
+            if (resolvableProfile != null) {
                 return resolvableProfile.gameProfile();
             }
         }
@@ -68,7 +65,6 @@ public class SkinUtil {
         //$$ }
         //$$ return null;
         //#endif
-        //spotless:on
     }
 
     public static PlayerSkin getSkin(GameProfile gameProfile) {

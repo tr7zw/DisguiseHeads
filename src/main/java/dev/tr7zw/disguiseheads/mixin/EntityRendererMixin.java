@@ -11,7 +11,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import dev.tr7zw.disguiseheads.DisguiseHeadsShared;
 import dev.tr7zw.disguiseheads.util.SkinUtil;
-import dev.tr7zw.util.ComponentProvider;
+import dev.tr7zw.transition.mc.ComponentProvider;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
@@ -38,7 +38,11 @@ public abstract class EntityRendererMixin extends LivingEntityRenderer {
                 || !DisguiseHeadsShared.instance.config.changeNameToDisguise) {
             return;
         }
-        ItemStack itemStack = player.headItem;
+        //#if MC >= 12104
+        ItemStack itemStack = player.headEquipment;
+        //#else
+        //$$ItemStack itemStack = player.headItem;
+        //#endif
         Item item = itemStack.getItem();
         if (item instanceof BlockItem blockitem && blockitem.getBlock() instanceof AbstractSkullBlock) {
             GameProfile gameProfile = SkinUtil.getGameProfile(itemStack);

@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import dev.tr7zw.disguiseheads.DisguiseHeadsShared;
+import dev.tr7zw.disguiseheads.LivingEntityExtender;
 import dev.tr7zw.disguiseheads.util.SkinUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
@@ -18,9 +19,11 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.entity.state.PlayerRenderState;
 import net.minecraft.client.resources.PlayerSkin;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
@@ -40,9 +43,13 @@ public abstract class ArmorStandRenderMixin<T extends LivingEntity, V extends En
         if (rendering) {
             return;
         }
-        if (!(livingEntity instanceof PlayerRenderState) && !livingEntity.isInvisible
-                && DisguiseHeadsShared.instance.config.enableArmorstandDisguise) {
-            PlayerSkin skin = SkinUtil.getHeadTextureLocation(livingEntity.headItem);
+        if (!(livingEntity instanceof PlayerRenderState) && livingEntity instanceof LivingEntityExtender hs
+                && !livingEntity.isInvisible && DisguiseHeadsShared.instance.config.enableArmorstandDisguise) {
+            //#if MC >= 12104
+            PlayerSkin skin = SkinUtil.getHeadTextureLocation(hs.getHeadItem());
+            //#else
+            //$$ PlayerSkin skin = SkinUtil.getHeadTextureLocation(livingEntity.headItem);
+            //#endif
             if (skin != null) {
                 EntityRenderer playerRenderer = Minecraft.getInstance().getEntityRenderDispatcher()
                         .getRenderer(Minecraft.getInstance().player);
@@ -55,12 +62,24 @@ public abstract class ArmorStandRenderMixin<T extends LivingEntity, V extends En
                 }
                 fakePlayer.isBaby = false;
                 if (DisguiseHeadsShared.instance.config.hideArmorstandHead) {
-                    fakePlayer.headItem = ItemStack.EMPTY;
+                    //#if MC >= 12104
+                    hs.setHeadItem(null);
+                    //#else
+                    //$$ fakePlayer.headItem = ItemStack.EMPTY;
+                    //#endif
                 }
                 playerRenderer.render(fakePlayer, poseStack, multiBufferSource, packedLight);
                 rendering = false;
                 info.cancel();
             }
+        }
+    }
+
+    @Inject(method = "extractRenderState", at = @At("RETURN"))
+    public void extractRenderState(LivingEntity livingEntity, LivingEntityRenderState livingEntityRenderState, float f,
+            CallbackInfo ci) {
+        if (livingEntityRenderState instanceof LivingEntityExtender ext) {
+            ext.setHeadItem(livingEntity.getItemBySlot(EquipmentSlot.HEAD));
         }
     }
 

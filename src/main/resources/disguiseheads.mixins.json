@@ -9,7 +9,8 @@
         "CustomHeadLayerMixin",
         "ArmorStandRenderMixin",
         "EntityRendererMixin",
-        "PlayerModelMixin"
+        "PlayerModelMixin",
+        "LivingEntityRenderStateMixin"
     ],
     "injectors": {
         "defaultRequire": 1
