@@ -18,14 +18,13 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.state.ArmorStandRenderState;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
-import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.entity.state.PlayerRenderState;
 import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
 
 @SuppressWarnings("rawtypes")
 @Mixin(LivingEntityRenderer.class)
@@ -44,7 +43,12 @@ public abstract class ArmorStandRenderMixin<T extends LivingEntity, V extends En
             return;
         }
         if (!(livingEntity instanceof PlayerRenderState) && livingEntity instanceof LivingEntityExtender hs
-                && !livingEntity.isInvisible && DisguiseHeadsShared.instance.config.enableArmorstandDisguise) {
+                && !livingEntity.isInvisible) {
+            if (!(DisguiseHeadsShared.instance.config.enableEverythingDisguise
+                    || (livingEntity instanceof ArmorStandRenderState
+                            && DisguiseHeadsShared.instance.config.enableArmorstandDisguise))) {
+                return;
+            }
             //#if MC >= 12104
             PlayerSkin skin = SkinUtil.getHeadTextureLocation(hs.getHeadItem());
             //#else
@@ -65,7 +69,7 @@ public abstract class ArmorStandRenderMixin<T extends LivingEntity, V extends En
                     //#if MC >= 12104
                     hs.setHeadItem(null);
                     //#else
-                    //$$ fakePlayer.headItem = ItemStack.EMPTY;
+                    //$$ fakePlayer.headItem = net.minecraft.world.item.ItemStack.EMPTY;
                     //#endif
                 }
                 playerRenderer.render(fakePlayer, poseStack, multiBufferSource, packedLight);

@@ -35,6 +35,7 @@ import net.minecraft.client.resources.PlayerSkin.Model;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 
 @SuppressWarnings("rawtypes")
@@ -105,8 +106,12 @@ public abstract class ArmorStandRenderMixin<T extends LivingEntity, V extends En
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     public void render(LivingEntity livingEntity, float entityYaw, float partialTicks, PoseStack poseStack,
             MultiBufferSource buffer, int packedLight, CallbackInfo info) {
-        if (!(livingEntity instanceof Player) && !livingEntity.isInvisible()
-                && DisguiseHeadsShared.instance.config.enableArmorstandDisguise) {
+        if (!(livingEntity instanceof Player) && !livingEntity.isInvisible()) {
+            if (!(DisguiseHeadsShared.instance.config.enableEverythingDisguise
+                    || (livingEntity instanceof ArmorStand
+                            && DisguiseHeadsShared.instance.config.enableArmorstandDisguise))) {
+                return;
+            }
             PlayerSkin skin = SkinUtil.getHeadTextureLocation(livingEntity);
             if (skin != null) {
                 V asm = (V) getModel();
