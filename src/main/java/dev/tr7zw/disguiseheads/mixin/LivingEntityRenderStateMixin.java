@@ -7,11 +7,13 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.world.item.ItemStack;
 
-//#if MC >= 12103
+//? if >= 1.21.3 {
+
 @Mixin(net.minecraft.client.renderer.entity.state.LivingEntityRenderState.class)
-//#else
-//$$ @Mixin(ItemStack.class)
-//#endif
+//? } else {
+
+// @Mixin(ItemStack.class)
+//? }
 public class LivingEntityRenderStateMixin implements LivingEntityExtender {
 
     @Getter

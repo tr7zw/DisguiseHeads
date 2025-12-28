@@ -22,15 +22,17 @@ import net.minecraft.world.level.block.AbstractSkullBlock;
 @Mixin(AbstractClientPlayer.class)
 public abstract class AbstractClientPlayerEntity extends Player {
 
-    //#if MC >= 12106
+    //? if >= 1.21.6 {
+
     AbstractClientPlayerEntity(ClientLevel clientLevel, GameProfile gameProfile) {
         super(clientLevel, gameProfile);
     }
-    //#else
-    //$$AbstractClientPlayerEntity(net.minecraft.world.level.Level level, net.minecraft.core.BlockPos blockPos, float f, GameProfile gameProfile) {
-    //$$    super(level, blockPos, f, gameProfile);
-    //$$}
-    //#endif
+    //? } else {
+/*
+     AbstractClientPlayerEntity(net.minecraft.world.level.Level level, net.minecraft.core.BlockPos blockPos, float f, GameProfile gameProfile) {
+        super(level, blockPos, f, gameProfile);
+     }
+    *///? }
 
     @Inject(method = "getSkin", at = @At("HEAD"), cancellable = true)
     public void getSkin(CallbackInfoReturnable<PlayerSkin> info) {

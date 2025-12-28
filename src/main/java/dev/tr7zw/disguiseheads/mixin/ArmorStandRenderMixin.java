@@ -1,30 +1,21 @@
 package dev.tr7zw.disguiseheads.mixin;
 
-import java.lang.reflect.Field;
+import com.mojang.blaze3d.vertex.*;
+import dev.tr7zw.disguiseheads.*;
+import dev.tr7zw.disguiseheads.util.*;
+import net.minecraft.client.*;
+import net.minecraft.client.model.*;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.entity.*;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.*;
+import net.minecraft.client.renderer.entity.state.*;
+import net.minecraft.client.resources.*;
+import net.minecraft.world.entity.*;
+import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.*;
 
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import com.mojang.blaze3d.vertex.PoseStack;
-
-import dev.tr7zw.disguiseheads.DisguiseHeadsShared;
-import dev.tr7zw.disguiseheads.LivingEntityExtender;
-import dev.tr7zw.disguiseheads.util.SkinUtil;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.state.ArmorStandRenderState;
-import net.minecraft.client.renderer.entity.state.EntityRenderState;
-import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
-import net.minecraft.client.renderer.entity.state.PlayerRenderState;
-import net.minecraft.client.resources.PlayerSkin;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
+import java.lang.reflect.*;
 
 @SuppressWarnings("rawtypes")
 @Mixin(LivingEntityRenderer.class)
@@ -49,11 +40,13 @@ public abstract class ArmorStandRenderMixin<T extends LivingEntity, V extends En
                             && DisguiseHeadsShared.instance.config.enableArmorstandDisguise))) {
                 return;
             }
-            //#if MC >= 12104
+            //? if >= 1.21.4 {
+
             PlayerSkin skin = SkinUtil.getHeadTextureLocation(hs.getHeadItem());
-            //#else
-            //$$ PlayerSkin skin = SkinUtil.getHeadTextureLocation(livingEntity.headItem);
-            //#endif
+            //? } else {
+/*
+             PlayerSkin skin = SkinUtil.getHeadTextureLocation(livingEntity.headItem);
+            *///? }
             if (skin != null) {
                 EntityRenderer playerRenderer = Minecraft.getInstance().getEntityRenderDispatcher()
                         .getRenderer(Minecraft.getInstance().player);
@@ -66,11 +59,13 @@ public abstract class ArmorStandRenderMixin<T extends LivingEntity, V extends En
                 }
                 fakePlayer.isBaby = false;
                 if (DisguiseHeadsShared.instance.config.hideArmorstandHead) {
-                    //#if MC >= 12104
+                    //? if >= 1.21.4 {
+
                     hs.setHeadItem(null);
-                    //#else
-                    //$$ fakePlayer.headItem = net.minecraft.world.item.ItemStack.EMPTY;
-                    //#endif
+                    //? } else {
+/*
+                     fakePlayer.headItem = net.minecraft.world.item.ItemStack.EMPTY;
+                    *///? }
                 }
                 playerRenderer.render(fakePlayer, poseStack, multiBufferSource, packedLight);
                 rendering = false;

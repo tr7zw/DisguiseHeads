@@ -18,7 +18,6 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.world.item.Items;
 import net.minecraft.client.Minecraft;
 
-
 public class ConfigScreenProvider {
 
     public static Screen createConfigScreen(Screen parent) {

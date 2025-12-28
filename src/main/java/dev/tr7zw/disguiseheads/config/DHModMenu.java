@@ -1,4 +1,5 @@
-//#if FABRIC
+//? if fabric {
+
 package dev.tr7zw.disguiseheads.config;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
@@ -14,4 +15,4 @@ public class DHModMenu implements ModMenuApi {
     }
 
 }
-//#endif
+//? }

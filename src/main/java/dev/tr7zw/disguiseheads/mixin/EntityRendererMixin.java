@@ -38,11 +38,13 @@ public abstract class EntityRendererMixin extends LivingEntityRenderer {
                 || !DisguiseHeadsShared.instance.config.changeNameToDisguise) {
             return;
         }
-        //#if MC >= 12104
+        //? if >= 1.21.4 {
+
         ItemStack itemStack = player.headEquipment;
-        //#else
-        //$$ItemStack itemStack = player.headItem;
-        //#endif
+        //? } else {
+/*
+         ItemStack itemStack = player.headItem;
+        *///? }
         Item item = itemStack.getItem();
         if (item instanceof BlockItem blockitem && blockitem.getBlock() instanceof AbstractSkullBlock) {
             GameProfile gameProfile = SkinUtil.getGameProfile(itemStack);

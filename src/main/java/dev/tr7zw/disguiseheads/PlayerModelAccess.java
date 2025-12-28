@@ -1,13 +1,14 @@
 package dev.tr7zw.disguiseheads;
-//#if MC <= 12101
+//? if <= 1.21.1 {
 
-//$$import net.minecraft.client.model.geom.ModelPart;
-//#endif
+// import net.minecraft.client.model.geom.ModelPart;
+//? }
 
 public interface PlayerModelAccess {
 
-    //#if MC <= 12101
-    //$$    public ModelPart getCapeModel();
-    //#endif
+    //? if <= 1.21.1 {
+
+    //    public ModelPart getCapeModel();
+    //? }
 
 }

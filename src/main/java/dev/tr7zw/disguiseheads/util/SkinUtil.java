@@ -12,27 +12,32 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-//#if MC >= 12002
+//? if >= 1.20.2 {
+
 import net.minecraft.client.resources.PlayerSkin;
-//#else
-//$$ import com.mojang.authlib.minecraft.MinecraftProfileTexture;
-//$$ import java.util.Map;
-//#endif
-//#if MC <= 12004
-//$$ import net.minecraft.Util;
-//$$ import org.apache.commons.lang3.StringUtils;
-//$$ import net.minecraft.nbt.CompoundTag;
-//$$ import net.minecraft.nbt.NbtUtils;
-//#else
+//? } else {
+
+// import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+// import java.util.Map;
+//? }
+//? if <= 1.20.4 {
+
+// import net.minecraft.Util;
+// import org.apache.commons.lang3.StringUtils;
+// import net.minecraft.nbt.CompoundTag;
+// import net.minecraft.nbt.NbtUtils;
+//? } else {
+
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.component.ResolvableProfile;
-//#endif
+//? }
 import net.minecraft.world.level.block.AbstractSkullBlock;
 
 public class SkinUtil {
 
     public static GameProfile getGameProfile(ItemStack itemStack) {
-        //#if MC >= 12005
+        //? if >= 1.20.5 {
+
         if (itemStack.getComponents().has(DataComponents.CUSTOM_MODEL_DATA)) {
             return null;
         }
@@ -50,21 +55,22 @@ public class SkinUtil {
             }
         }
         return null;
-        //#else
-        //$$ if (itemStack.hasTag()) {
-        //$$     CompoundTag compoundTag = itemStack.getTag();
-        //$$     if (compoundTag.contains("CustomModelData")) {
-        //$$         return null; // do not try to 3d-fy custom head models
-        //$$     }
-        //$$     if (compoundTag.contains("SkullOwner", 10)) {
-        //$$         return NbtUtils.readGameProfile(compoundTag.getCompound("SkullOwner"));
-        //$$     } else if (compoundTag.contains("SkullOwner", 8)
-        //$$             && !StringUtils.isBlank(compoundTag.getString("SkullOwner"))) {
-        //$$         return new GameProfile(Util.NIL_UUID, compoundTag.getString("SkullOwner"));
-        //$$     }
-        //$$ }
-        //$$ return null;
-        //#endif
+        //? } else {
+
+        // if (itemStack.hasTag()) {
+        //     CompoundTag compoundTag = itemStack.getTag();
+        //     if (compoundTag.contains("CustomModelData")) {
+        //         return null; // do not try to 3d-fy custom head models
+        //     }
+        //     if (compoundTag.contains("SkullOwner", 10)) {
+        //         return NbtUtils.readGameProfile(compoundTag.getCompound("SkullOwner"));
+        //     } else if (compoundTag.contains("SkullOwner", 8)
+        //             && !StringUtils.isBlank(compoundTag.getString("SkullOwner"))) {
+        //         return new GameProfile(Util.NIL_UUID, compoundTag.getString("SkullOwner"));
+        //     }
+        // }
+        // return null;
+        //? }
     }
 
     public static PlayerSkin getSkin(GameProfile gameProfile) {
