@@ -26,15 +26,22 @@
 /*
  package dev.tr7zw.disguiseheads;
 
- import net.neoforged.fml.loading.FMLEnvironment;
  import net.neoforged.fml.common.Mod;
+ import net.neoforged.fml.loading.FMLEnvironment;
  import dev.tr7zw.transition.loader.ModLoaderEventUtil;
+ import net.neoforged.api.distmarker.Dist;
 
  @Mod("disguiseheads")
  public class DisguiseHeadsBootstrap {
 
     public DisguiseHeadsBootstrap() {
-            if (FMLEnvironment.dist.isClient()){
+ //? if < 1.21.9 {
+/^
+         if(FMLEnvironment.dist == Dist.CLIENT) {
+ ^///? } else {
+
+         if(FMLEnvironment.getDist() == Dist.CLIENT) {
+ //? }
                     ModLoaderEventUtil.registerClientSetupListener(() -> new DisguiseHeadsShared().init());
             }
     }

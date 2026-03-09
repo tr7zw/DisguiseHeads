@@ -1,7 +1,8 @@
 package dev.tr7zw.disguiseheads.util;
 
-import java.util.UUID;
+import java.util.*;
 
+import dev.tr7zw.transition.mc.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.core.UUIDUtil;
@@ -9,12 +10,13 @@ import com.mojang.authlib.GameProfile;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.player.*;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 //? if >= 1.20.2 {
 
-import net.minecraft.client.resources.PlayerSkin;
+import net.minecraft.client.resources.*;
 //? } else {
 
 // import com.mojang.authlib.minecraft.MinecraftProfileTexture;
@@ -43,16 +45,7 @@ public class SkinUtil {
         }
         if (itemStack.getComponents().has(DataComponents.PROFILE)) {
             ResolvableProfile resolvableProfile = (ResolvableProfile) itemStack.get(DataComponents.PROFILE);
-            if (resolvableProfile != null && !resolvableProfile.isResolved()) {
-                itemStack.remove(DataComponents.PROFILE);
-                resolvableProfile.resolve().thenAcceptAsync(
-                        resolvableProfile2 -> itemStack.set(DataComponents.PROFILE, resolvableProfile2),
-                        Minecraft.getInstance());
-                resolvableProfile = null;
-            }
-            if (resolvableProfile != null) {
-                return resolvableProfile.gameProfile();
-            }
+            return PlayerUtil.getProfile(resolvableProfile);
         }
         return null;
         //? } else {
@@ -75,10 +68,20 @@ public class SkinUtil {
 
     public static PlayerSkin getSkin(GameProfile gameProfile) {
         Minecraft minecraftClient = Minecraft.getInstance();
+        //? if >= 1.21.9 {
+
+        if (gameProfile.properties() == null) {
+            return DefaultPlayerSkin.get(getOrCreatePlayerUUID(gameProfile));
+        }
+        PlayerSkin skin = minecraftClient.getSkinManager().get(gameProfile).getNow(Optional.empty())
+                .orElseGet(() -> null);
+        //? } else {
+        /*
         if (gameProfile.getProperties() == null) {
             return DefaultPlayerSkin.get(getOrCreatePlayerUUID(gameProfile));
         }
         PlayerSkin skin = minecraftClient.getSkinManager().getInsecureSkin(gameProfile);
+        *///? }
         if (skin != null) {
             return skin;
         }
@@ -86,11 +89,19 @@ public class SkinUtil {
     }
 
     public static UUID getOrCreatePlayerUUID(GameProfile gameProfile) {
+        //? if >= 1.21.9 {
+
+        UUID uUID = gameProfile.id();
+        if (uUID == null) {
+            uUID = UUIDUtil.createOfflinePlayerUUID(gameProfile.name());
+        }
+        //? } else {
+        /*
         UUID uUID = gameProfile.getId();
         if (uUID == null) {
             uUID = UUIDUtil.createOfflinePlayerUUID(gameProfile.getName());
         }
-
+         *///? }
         return uUID;
     }
 

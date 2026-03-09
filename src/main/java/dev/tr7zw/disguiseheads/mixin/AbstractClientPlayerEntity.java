@@ -1,5 +1,6 @@
 package dev.tr7zw.disguiseheads.mixin;
 
+import net.minecraft.world.entity.player.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -11,9 +12,8 @@ import dev.tr7zw.disguiseheads.DisguiseHeadsShared;
 import dev.tr7zw.disguiseheads.util.SkinUtil;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.resources.PlayerSkin;
+import net.minecraft.client.resources.*;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -28,7 +28,7 @@ public abstract class AbstractClientPlayerEntity extends Player {
         super(clientLevel, gameProfile);
     }
     //? } else {
-/*
+    /*
      AbstractClientPlayerEntity(net.minecraft.world.level.Level level, net.minecraft.core.BlockPos blockPos, float f, GameProfile gameProfile) {
         super(level, blockPos, f, gameProfile);
      }

@@ -9,8 +9,10 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.*;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.*;
 import net.minecraft.client.renderer.entity.state.*;
+import net.minecraft.client.renderer.state.*;
 import net.minecraft.client.resources.*;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.player.*;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.*;
@@ -27,14 +29,22 @@ public abstract class ArmorStandRenderMixin<T extends LivingEntity, V extends En
 
     boolean rendering = false;
 
-    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    public void render(LivingEntityRenderState livingEntity, PoseStack poseStack, MultiBufferSource multiBufferSource,
+    //? if >= 1.21.9 {
+
+    @Inject(method = "submit", at = @At("HEAD"), cancellable = true)
+    public void submit(LivingEntityRenderState livingEntity, PoseStack poseStack,
+            SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState, CallbackInfo info) {
+        //? } else {
+        /*
+        @Inject(method = "render", at = @At("HEAD"), cancellable = true)
+        public void render(LivingEntityRenderState livingEntity, PoseStack poseStack, MultiBufferSource multiBufferSource,
             int packedLight, CallbackInfo info) {
+        *///? }
         if (rendering) {
             return;
         }
-        if (!(livingEntity instanceof PlayerRenderState) && livingEntity instanceof LivingEntityExtender hs
-                && !livingEntity.isInvisible) {
+        if (!(livingEntity instanceof /*? if >=1.21.9 {*/ AvatarRenderState /*?} else {*//*PlayerRenderState*//*?}*/)
+                && livingEntity instanceof LivingEntityExtender hs && !livingEntity.isInvisible) {
             if (!(DisguiseHeadsShared.instance.config.enableEverythingDisguise
                     || (livingEntity instanceof ArmorStandRenderState
                             && DisguiseHeadsShared.instance.config.enableArmorstandDisguise))) {
@@ -44,14 +54,15 @@ public abstract class ArmorStandRenderMixin<T extends LivingEntity, V extends En
 
             PlayerSkin skin = SkinUtil.getHeadTextureLocation(hs.getHeadItem());
             //? } else {
-/*
+            /*
              PlayerSkin skin = SkinUtil.getHeadTextureLocation(livingEntity.headItem);
             *///? }
             if (skin != null) {
                 EntityRenderer playerRenderer = Minecraft.getInstance().getEntityRenderDispatcher()
                         .getRenderer(Minecraft.getInstance().player);
                 rendering = true;
-                PlayerRenderState fakePlayer = (PlayerRenderState) playerRenderer.createRenderState();
+                var fakePlayer = (/*? if >=1.21.9 {*/ AvatarRenderState /*?} else {*//*PlayerRenderState*//*?}*/) playerRenderer
+                        .createRenderState();
                 remapRenderState(livingEntity, fakePlayer);
                 fakePlayer.skin = skin;
                 if (fakePlayer.isBaby) {
@@ -63,11 +74,17 @@ public abstract class ArmorStandRenderMixin<T extends LivingEntity, V extends En
 
                     hs.setHeadItem(null);
                     //? } else {
-/*
+                    /*
                      fakePlayer.headItem = net.minecraft.world.item.ItemStack.EMPTY;
                     *///? }
                 }
+                //? if >= 1.21.9 {
+
+                playerRenderer.submit(fakePlayer, poseStack, submitNodeCollector, cameraRenderState);
+                //? } else {
+                /*
                 playerRenderer.render(fakePlayer, poseStack, multiBufferSource, packedLight);
+                *///? }
                 rendering = false;
                 info.cancel();
             }

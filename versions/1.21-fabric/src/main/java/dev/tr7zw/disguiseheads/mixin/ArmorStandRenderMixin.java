@@ -107,9 +107,8 @@ public abstract class ArmorStandRenderMixin<T extends LivingEntity, V extends En
     public void render(LivingEntity livingEntity, float entityYaw, float partialTicks, PoseStack poseStack,
             MultiBufferSource buffer, int packedLight, CallbackInfo info) {
         if (!(livingEntity instanceof Player) && !livingEntity.isInvisible()) {
-            if (!(DisguiseHeadsShared.instance.config.enableEverythingDisguise
-                    || (livingEntity instanceof ArmorStand
-                            && DisguiseHeadsShared.instance.config.enableArmorstandDisguise))) {
+            if (!(DisguiseHeadsShared.instance.config.enableEverythingDisguise || (livingEntity instanceof ArmorStand
+                    && DisguiseHeadsShared.instance.config.enableArmorstandDisguise))) {
                 return;
             }
             PlayerSkin skin = SkinUtil.getHeadTextureLocation(livingEntity);
