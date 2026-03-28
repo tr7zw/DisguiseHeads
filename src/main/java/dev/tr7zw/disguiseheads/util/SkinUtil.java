@@ -118,6 +118,9 @@ public class SkinUtil {
     }
 
     public static PlayerSkin getHeadTextureLocation(ItemStack itemStack) {
+        if (itemStack == null) {
+            return null;
+        }
         Item item = itemStack.getItem();
         if (item instanceof BlockItem blockitem && blockitem.getBlock() instanceof AbstractSkullBlock) {
             GameProfile gameProfile = SkinUtil.getGameProfile(itemStack);

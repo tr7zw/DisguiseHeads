@@ -31,11 +31,11 @@ public abstract class CustomHeadLayerMixin extends RenderLayer {
          *///? }
             //? if >= 1.21.4 {
 
-        if (livingEntity instanceof /*? if >=1.21.9 {*/ AvatarRenderState /*?} else {*//*PlayerRenderState*//*?}*/ ps
+        if (livingEntity instanceof AvatarRenderState ps
                 && DisguiseHeadsShared.instance.config.enablePlayerDisguise && ps.wornHeadProfile != null) {
             //? } else {
             /*
-             if (shouldHide(livingEntity.headItem) && livingEntity instanceof PlayerRenderState) {
+             if (shouldHide(livingEntity.headItem) && livingEntity instanceof AvatarRenderState) {
             *///? }
             info.cancel();
         }

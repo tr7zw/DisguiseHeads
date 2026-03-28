@@ -55,7 +55,7 @@ public abstract class EntityRendererMixin extends LivingEntityRenderer {
     //? } else {
     /*
     @Inject(method = "renderNameTag", cancellable = true, at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;popPose()V", shift = Shift.BY, by = -5))
-    private void injected(PlayerRenderState player, Component displayName, PoseStack poseStack,
+    private void injected(AvatarRenderState player, Component displayName, PoseStack poseStack,
             MultiBufferSource buffer, int packedLight, CallbackInfo ci) {
         if (!DisguiseHeadsShared.instance.config.enablePlayerDisguise
                 || !DisguiseHeadsShared.instance.config.changeNameToDisguise) {

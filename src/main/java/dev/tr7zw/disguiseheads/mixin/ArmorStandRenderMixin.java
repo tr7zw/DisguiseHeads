@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.*;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.*;
 import net.minecraft.client.renderer.entity.state.*;
-import net.minecraft.client.renderer.state.*;
 import net.minecraft.client.resources.*;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.*;
@@ -33,7 +32,8 @@ public abstract class ArmorStandRenderMixin<T extends LivingEntity, V extends En
 
     @Inject(method = "submit", at = @At("HEAD"), cancellable = true)
     public void submit(LivingEntityRenderState livingEntity, PoseStack poseStack,
-            SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState, CallbackInfo info) {
+            SubmitNodeCollector submitNodeCollector,
+            net.minecraft.client.renderer.state.level.CameraRenderState cameraRenderState, CallbackInfo info) {
         //? } else {
         /*
         @Inject(method = "render", at = @At("HEAD"), cancellable = true)
@@ -43,7 +43,7 @@ public abstract class ArmorStandRenderMixin<T extends LivingEntity, V extends En
         if (rendering) {
             return;
         }
-        if (!(livingEntity instanceof /*? if >=1.21.9 {*/ AvatarRenderState /*?} else {*//*PlayerRenderState*//*?}*/)
+        if (!(livingEntity instanceof AvatarRenderState)
                 && livingEntity instanceof LivingEntityExtender hs && !livingEntity.isInvisible) {
             if (!(DisguiseHeadsShared.instance.config.enableEverythingDisguise
                     || (livingEntity instanceof ArmorStandRenderState
@@ -61,7 +61,7 @@ public abstract class ArmorStandRenderMixin<T extends LivingEntity, V extends En
                 EntityRenderer playerRenderer = Minecraft.getInstance().getEntityRenderDispatcher()
                         .getRenderer(Minecraft.getInstance().player);
                 rendering = true;
-                var fakePlayer = (/*? if >=1.21.9 {*/ AvatarRenderState /*?} else {*//*PlayerRenderState*//*?}*/) playerRenderer
+                var fakePlayer = (AvatarRenderState) playerRenderer
                         .createRenderState();
                 remapRenderState(livingEntity, fakePlayer);
                 fakePlayer.skin = skin;
