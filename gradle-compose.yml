@@ -3,7 +3,7 @@ source: "https://github.com/tr7zw/ProcessedModTemplate/tree/stonecutter261"
 replacements:
   name: "DisguiseHeads"
   id: "disguiseheads"
-  version: "1.3.2"
+  version: "1.4.0"
   description: "Swap skins when wearing a player head."
   homepageUrl: "https://modrinth.com/plugin/itemswapper"
   sourcesUrl: "https://github.com/tr7zw/DisguiseHeads"
