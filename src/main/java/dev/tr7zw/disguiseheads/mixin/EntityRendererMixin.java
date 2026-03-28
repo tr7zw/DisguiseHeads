@@ -53,8 +53,8 @@ public abstract class EntityRendererMixin extends LivingEntityRenderer {
         }
     }
     //? } else {
-    /*
-    @Inject(method = "renderNameTag", cancellable = true, at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;popPose()V", shift = Shift.BY, by = -5))
+
+    /*@Inject(method = "renderNameTag", cancellable = true, at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;popPose()V", shift = Shift.BY, by = -5))
     private void injected(AvatarRenderState player, Component displayName, PoseStack poseStack,
             MultiBufferSource buffer, int packedLight, CallbackInfo ci) {
         if (!DisguiseHeadsShared.instance.config.enablePlayerDisguise
@@ -66,8 +66,8 @@ public abstract class EntityRendererMixin extends LivingEntityRenderer {
         ItemStack itemStack = player.headEquipment;
         //? } else {
     
-         ItemStack itemStack = player.headItem;
-        //? }
+         /^ItemStack itemStack = player.headItem;
+        ^///? }
         Item item = itemStack.getItem();
         if (item instanceof BlockItem blockitem && blockitem.getBlock() instanceof AbstractSkullBlock) {
             GameProfile gameProfile = SkinUtil.getGameProfile(itemStack);

@@ -28,10 +28,10 @@ public abstract class AbstractClientPlayerEntity extends Player {
         super(clientLevel, gameProfile);
     }
     //? } else {
-    /*
-     AbstractClientPlayerEntity(net.minecraft.world.level.Level level, net.minecraft.core.BlockPos blockPos, float f, GameProfile gameProfile) {
-        super(level, blockPos, f, gameProfile);
-     }
+
+    /*AbstractClientPlayerEntity(net.minecraft.world.level.Level level, net.minecraft.core.BlockPos blockPos, float f, GameProfile gameProfile) {
+       super(level, blockPos, f, gameProfile);
+    }
     *///? }
 
     @Inject(method = "getSkin", at = @At("HEAD"), cancellable = true)
@@ -39,7 +39,13 @@ public abstract class AbstractClientPlayerEntity extends Player {
         if (!DisguiseHeadsShared.instance.config.enablePlayerDisguise) {
             return;
         }
+        //? if >= 1.21.5 {
+        // bypass FirstPersonModel's head hiding, as we need the head item to get the skin
+        ItemStack itemStack = equipment.get(EquipmentSlot.HEAD);
+        //? } else {
+        /*
         ItemStack itemStack = getItemBySlot(EquipmentSlot.HEAD);
+        *///? }
         Item item = itemStack.getItem();
         if (item instanceof BlockItem blockitem && blockitem.getBlock() instanceof AbstractSkullBlock) {
             GameProfile gameProfile = SkinUtil.getGameProfile(itemStack);

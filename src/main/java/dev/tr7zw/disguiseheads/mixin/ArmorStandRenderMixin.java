@@ -35,16 +35,16 @@ public abstract class ArmorStandRenderMixin<T extends LivingEntity, V extends En
             SubmitNodeCollector submitNodeCollector,
             net.minecraft.client.renderer.state.level.CameraRenderState cameraRenderState, CallbackInfo info) {
         //? } else {
-        /*
-        @Inject(method = "render", at = @At("HEAD"), cancellable = true)
+
+        /*@Inject(method = "render", at = @At("HEAD"), cancellable = true)
         public void render(LivingEntityRenderState livingEntity, PoseStack poseStack, MultiBufferSource multiBufferSource,
             int packedLight, CallbackInfo info) {
         *///? }
         if (rendering) {
             return;
         }
-        if (!(livingEntity instanceof AvatarRenderState)
-                && livingEntity instanceof LivingEntityExtender hs && !livingEntity.isInvisible) {
+        if (!(livingEntity instanceof AvatarRenderState) && livingEntity instanceof LivingEntityExtender hs
+                && !livingEntity.isInvisible) {
             if (!(DisguiseHeadsShared.instance.config.enableEverythingDisguise
                     || (livingEntity instanceof ArmorStandRenderState
                             && DisguiseHeadsShared.instance.config.enableArmorstandDisguise))) {
@@ -61,8 +61,7 @@ public abstract class ArmorStandRenderMixin<T extends LivingEntity, V extends En
                 EntityRenderer playerRenderer = Minecraft.getInstance().getEntityRenderDispatcher()
                         .getRenderer(Minecraft.getInstance().player);
                 rendering = true;
-                var fakePlayer = (AvatarRenderState) playerRenderer
-                        .createRenderState();
+                var fakePlayer = (AvatarRenderState) playerRenderer.createRenderState();
                 remapRenderState(livingEntity, fakePlayer);
                 fakePlayer.skin = skin;
                 if (fakePlayer.isBaby) {
@@ -82,8 +81,8 @@ public abstract class ArmorStandRenderMixin<T extends LivingEntity, V extends En
 
                 playerRenderer.submit(fakePlayer, poseStack, submitNodeCollector, cameraRenderState);
                 //? } else {
-                /*
-                playerRenderer.render(fakePlayer, poseStack, multiBufferSource, packedLight);
+
+                /*playerRenderer.render(fakePlayer, poseStack, multiBufferSource, packedLight);
                 *///? }
                 rendering = false;
                 info.cancel();

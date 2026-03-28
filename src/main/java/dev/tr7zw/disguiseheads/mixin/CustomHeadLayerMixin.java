@@ -24,15 +24,15 @@ public abstract class CustomHeadLayerMixin extends RenderLayer {
     public void submit(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int i,
             LivingEntityRenderState livingEntity, float f, float g, CallbackInfo info) {
         //? } else {
-        /*
-        @Inject(at = @At("HEAD"), method = "render", cancellable = true)
+
+        /*@Inject(at = @At("HEAD"), method = "render", cancellable = true)
         public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i,
             LivingEntityRenderState livingEntity, float f, float g, CallbackInfo info) {
          *///? }
             //? if >= 1.21.4 {
 
-        if (livingEntity instanceof AvatarRenderState ps
-                && DisguiseHeadsShared.instance.config.enablePlayerDisguise && ps.wornHeadProfile != null) {
+        if (livingEntity instanceof AvatarRenderState ps && DisguiseHeadsShared.instance.config.enablePlayerDisguise
+                && ps.wornHeadProfile != null) {
             //? } else {
             /*
              if (shouldHide(livingEntity.headItem) && livingEntity instanceof AvatarRenderState) {

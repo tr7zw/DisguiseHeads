@@ -76,8 +76,8 @@ public class SkinUtil {
         PlayerSkin skin = minecraftClient.getSkinManager().get(gameProfile).getNow(Optional.empty())
                 .orElseGet(() -> null);
         //? } else {
-        /*
-        if (gameProfile.getProperties() == null) {
+
+        /*if (gameProfile.getProperties() == null) {
             return DefaultPlayerSkin.get(getOrCreatePlayerUUID(gameProfile));
         }
         PlayerSkin skin = minecraftClient.getSkinManager().getInsecureSkin(gameProfile);
@@ -96,8 +96,8 @@ public class SkinUtil {
             uUID = UUIDUtil.createOfflinePlayerUUID(gameProfile.name());
         }
         //? } else {
-        /*
-        UUID uUID = gameProfile.getId();
+
+        /*UUID uUID = gameProfile.getId();
         if (uUID == null) {
             uUID = UUIDUtil.createOfflinePlayerUUID(gameProfile.getName());
         }
